@@ -83,13 +83,14 @@ public class NPCUtil {
     /**
      * Removes an NPC from the server.
      * @param identifier The identifier of the NPC to remove.
+     * @return Whether there was an NPC with that identifier.
      */
-    public static void removeNPC(String identifier) {
+    public static boolean removeNPC(String identifier) {
         checkUsable();
 
         NPCData data = npcs.remove(identifier);
         if (data == null)
-            return;
+            return false;
 
         lookAtPlayerNPCs.remove(identifier);
         matchSneakingNPCs.remove(identifier);
@@ -100,6 +101,24 @@ public class NPCUtil {
             if (player != null)
                 wrapper.sendPackets(player, packets);
         }
+
+        return true;
+    }
+
+    /**
+     * Checks whether an NPC with the given identifier exists.
+     * @param identifier The identifier to check.
+     * @return Whether an NPC with that identifier exists.
+     */
+    public static boolean isNPC(String identifier) {
+        return npcs.containsKey(identifier);
+    }
+
+    /**
+     * @return A set containing the identifiers of all npcs.
+     */
+    public static Set<String> getNPCIdentifiers() {
+        return Collections.unmodifiableSet(npcs.keySet());
     }
 
     /**
@@ -219,7 +238,7 @@ public class NPCUtil {
             UUID uuid = player.getUniqueId();
             if (!joinFinishedPlayers.contains(uuid))
                 return false;
-            if (npc.getPlayers() != null && !npc.getPlayers().contains(uuid))
+            if (npc.isShownForPlayer(uuid))
                 return false;
 
             if (currentPlayers.contains(uuid)) {

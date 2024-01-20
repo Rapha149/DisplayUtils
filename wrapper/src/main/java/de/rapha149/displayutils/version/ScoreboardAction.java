@@ -1,5 +1,8 @@
 package de.rapha149.displayutils.version;
 
+/**
+ * An enum for the scoreboard actions used for the scoreboard packets.
+ */
 public enum ScoreboardAction {
     CREATE(0),
     REMOVE(1),

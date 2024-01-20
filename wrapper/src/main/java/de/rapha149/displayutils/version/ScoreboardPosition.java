@@ -1,5 +1,8 @@
 package de.rapha149.displayutils.version;
 
+/**
+ * An enum for the scoreboard actions. Used for the display objective packet.
+ */
 public enum ScoreboardPosition {
 
     LIST(0),
