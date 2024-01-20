@@ -1,0 +1,35 @@
+#!/bin/bash
+
+if [[ $# < 2 ]]
+then
+    echo "Usage: copy [Original] [Copy]"
+    exit
+fi
+
+original=$(echo "$1" | sed "s/\\/$//")
+copy=$(echo "$2" | sed "s/\\/$//")
+
+if ! [ -d "$original" ]
+then
+    echo "Original module does not exist."
+    exit
+fi
+
+if [ -e "$copy" ]
+then
+    echo "Copy module does already exist."
+    exit
+fi
+
+artifactId="displayutils"
+groupId="de.rapha149.displayutils"
+path="$(echo $groupId | sed 's/\./\//g')"
+mainModule="api"
+
+mkdir "$copy"
+sed "s/<artifactId>$artifactId-$original<\\/artifactId>/<artifactId>$artifactId-$copy<\\/artifactId>/" "$original/pom.xml" > "$copy/pom.xml"
+cp -r "$original/src" "$copy/src"
+sed "s/class Wrapper$original/class Wrapper$copy/" "$copy/src/main/java/$path/version/Wrapper$original.java" > "$copy/src/main/java/$path/version/Wrapper$copy.java"
+rm "$copy/src/main/java/$path/version/Wrapper$original.java"
+echo "$(sed "s/<module>$original<\\/module>/<module>$original<\\/module>\n        <module>$copy<\\/module>/" pom.xml)" > pom.xml
+echo "$(sed "s/    <\\/dependencies>/        <dependency>\n            <groupId>$groupId<\\/groupId>\n            <artifactId>$artifactId-$copy<\\/artifactId>\n            <version>\${project.parent.version}<\\/version>\n            <scope>compile<\\/scope>\n        <\\/dependency>\n    <\\/dependencies>/" $mainModule/pom.xml)" > $mainModule/pom.xml
