@@ -12,6 +12,32 @@
 
     <artifactId>displayutils</artifactId>
 
+    <name>${project.groupId}:displayutils</name>
+    <description>An api to display various things in Minecraft that normally would need packet handling.</description>
+    <url>https://github.com/Rapha149/DisplayUtils</url>
+
+    <developers>
+        <developer>
+            <name>Rapha149</name>
+            <email>rapha@rapha149.de</email>
+            <url>https://github.com/Rapha149</url>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/Rapha149/DisplayUtils.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Rapha149/DisplayUtils.git</developerConnection>
+        <url>http://github.com/Rapha149/DisplayUtils/tree/main</url>
+    </scm>
+
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -39,19 +65,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.2.4</version>
                 <executions>
                     <execution>
-                        <phase>compile</phase>
-                        <configuration>
-                            <target/>
-                        </configuration>
+                        <phase>package</phase>
                         <goals>
-                            <goal>run</goal>
+                            <goal>shade</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -72,8 +91,7 @@
                         <configuration>
                             <includeDependencySources>true</includeDependencySources>
                             <dependencySourceIncludes>
-                                <dependencySourceInclude>de.rapha149.displayutils:displayutils-wrapper
-                                </dependencySourceInclude>
+                                <dependencySourceInclude>de.rapha149.displayutils:displayutils-wrapper</dependencySourceInclude>
                             </dependencySourceIncludes>
                         </configuration>
                     </execution>
@@ -94,7 +112,7 @@
                             <classifier>sources</classifier>
                             <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
                             <outputDirectory>${project.build.directory}/external-sources</outputDirectory>
-                            <includeArtifactIds>displayutils-wrapper</includeArtifactIds>
+                            <includeGroupIds>de.rapha149.displayutils</includeGroupIds>
                         </configuration>
                     </execution>
                 </executions>
@@ -112,7 +130,7 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>target/external-sources</source>
+                                <source>${project.build.directory}/external-sources</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -147,12 +165,42 @@
                             <excludeDefaultDirectories>true</excludeDefaultDirectories>
                             <filesets>
                                 <fileset>
-                                    <directory>target/external-sources</directory>
+                                    <directory>${project.build.directory}/external-sources</directory>
                                 </fileset>
                             </filesets>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <configuration>
+                            <!--suppress MavenModelInspection -->
+                            <keyname>${gpg.keyname}</keyname>
+                            <!--suppress MavenModelInspection -->
+                            <passphraseServerId>${gpg.keyname}</passphraseServerId>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.1.2</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <tokenEnabled>true</tokenEnabled>
+                </configuration>
             </plugin>
         </plugins>
     </build>
