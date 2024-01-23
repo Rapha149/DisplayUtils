@@ -3,7 +3,6 @@ package de.rapha149.displayutils.utilityclasses.npc;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -54,32 +53,12 @@ public class NPCBuilder {
     }
 
     /**
-     * Sets the player that can see the NPC. All other players won't be able to see it.
-     * If this and the other mentioned methods are not called, all players will be able to see the NPC.
-     *
-     * @param player The player that can see the NPC.
-     * @return The {@link NPCBuilder} instance.
-     * @throws NullPointerException If the player is null.
-     * @see #setIncludedPlayers(List)
-     * @see #setIncludedPlayerUUIDs(List)
-     * @see #setExcludedPlayers(List)
-     * @see #setExcludedPlayerUUIDs(List)
-     */
-    public NPCBuilder setIncludedPlayer(Player player) {
-        Objects.requireNonNull(player, "The player cannot be null");
-
-        this.includedPlayers = Collections.singletonList(player.getUniqueId());
-        return this;
-    }
-
-    /**
      * Sets the players that can see the NPC. All other players won't be able to see it.
      * If this and the other mentioned methods are not called, all players will be able to see the NPC.
      *
      * @param includedPlayers The players that can see the NPC.
      * @return The {@link NPCBuilder} instance.
      * @throws NullPointerException If the list or any of the players are null.
-     * @see #setIncludedPlayer(Player)
      * @see #setIncludedPlayerUUIDs(List)
      * @see #setExcludedPlayers(List)
      * @see #setExcludedPlayerUUIDs(List)
@@ -99,7 +78,6 @@ public class NPCBuilder {
      * @param uuids The uuids of the players that can see the NPC.
      * @return The {@link NPCBuilder} instance.
      * @throws NullPointerException If the list or any of the uuids are null.
-     * @see #setIncludedPlayer(Player)
      * @see #setIncludedPlayers(List)
      * @see #setExcludedPlayers(List)
      * @see #setExcludedPlayerUUIDs(List)
@@ -119,7 +97,6 @@ public class NPCBuilder {
      * @param excludedPlayers The players that cannot see the NPC.
      * @return The {@link NPCBuilder} instance.
      * @throws NullPointerException If the list or any of the players are null.
-     * @see #setIncludedPlayer(Player)
      * @see #setIncludedPlayers(List)
      * @see #setIncludedPlayerUUIDs(List)
      * @see #setExcludedPlayerUUIDs(List)
@@ -139,7 +116,6 @@ public class NPCBuilder {
      * @param uuids The uuids of the players that cannot see the NPC.
      * @return The {@link NPCBuilder} instance.
      * @throws NullPointerException If the list or any of the uuids are null.
-     * @see #setIncludedPlayer(Player)
      * @see #setIncludedPlayers(List)
      * @see #setIncludedPlayerUUIDs(List)
      * @see #setExcludedPlayers(List)
