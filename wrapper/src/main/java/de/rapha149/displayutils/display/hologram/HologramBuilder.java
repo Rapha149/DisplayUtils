@@ -4,11 +4,13 @@ import de.rapha149.displayutils.display.hologram.provider.GeneralHologramContent
 import de.rapha149.displayutils.display.hologram.provider.HologramContentProvider;
 import de.rapha149.displayutils.display.hologram.provider.PlayerHologramContentProvider;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class HologramBuilder {
 
@@ -88,10 +90,25 @@ public class HologramBuilder {
      * Sets the players that can see the hologram. All other players won't be able to see it.
      * @param players The players that can see the hologram.
      * @return The {@link HologramBuilder} instance.
-     * @see #setPlayers(Supplier)
+     * @see #setPlayerUUIDs(List)
+     * @see #setPlayerSupplier(Supplier)
+     * @see #setPlayerUUIDSupplier(Supplier) 
      */
-    public HologramBuilder setPlayers(List<UUID> players) {
-        this.players = players;
+    public HologramBuilder setPlayers(List<Player> players) {
+        this.players = players.stream().map(Player::getUniqueId).collect(Collectors.toList());
+        return this;
+    }
+    
+    /**
+     * Sets the players that can see the hologram. All other players won't be able to see it.
+     * @param uuids The uuids of the players that can see the hologram.
+     * @return The {@link HologramBuilder} instance.
+     * @see #setPlayers(List)
+     * @see #setPlayerSupplier(Supplier) 
+     * @see #setPlayerUUIDSupplier(Supplier) 
+     */
+    public HologramBuilder setPlayerUUIDs(List<UUID> uuids) {
+        this.players = uuids;
         return this;
     }
 
@@ -103,11 +120,33 @@ public class HologramBuilder {
      * @param playersSupplier The supplier that is used to get the players that can see the hologram.
      * @return The {@link HologramBuilder} instance.
      * @throws java.lang.NullPointerException If the players supplier is null.
+     * @see #setPlayers(List)
+     * @see #setPlayerUUIDs(List) 
+     * @see #setPlayerUUIDSupplier(Supplier) 
      */
-    public HologramBuilder setPlayers(Supplier<List<UUID>> playersSupplier) {
+    public HologramBuilder setPlayerSupplier(Supplier<List<Player>> playersSupplier) {
         Objects.requireNonNull(playersSupplier, "The players supplier cannot be null");
 
-        this.playersSupplier = playersSupplier;
+        this.playersSupplier = () -> playersSupplier.get().stream().map(Player::getUniqueId).collect(Collectors.toList());
+        return this;
+    }
+    
+    /**
+     * Sets a supplier that is used to get the players that can see the hologram. All other players won't be able to see it.
+     * The supplier will be called every time the hologram is updated.
+     * This overrides the players that are set with {@link #setPlayers(List)}.
+     *
+     * @param uuidsSupplier The supplier that is used to get the uuids of the players that can see the hologram.
+     * @return The {@link HologramBuilder} instance.
+     * @throws java.lang.NullPointerException If the players supplier is null.
+     * @see #setPlayers(List) 
+     * @see #setPlayerUUIDs(List) 
+     * @see #setPlayerSupplier(Supplier) 
+     */
+    public HologramBuilder setPlayerUUIDSupplier(Supplier<List<UUID>> uuidsSupplier) {
+        Objects.requireNonNull(uuidsSupplier, "The players supplier cannot be null");
+
+        this.playersSupplier = uuidsSupplier;
         return this;
     }
 
