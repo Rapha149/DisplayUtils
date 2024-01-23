@@ -1,7 +1,7 @@
 package de.rapha149.displayutils.version;
 
-import de.rapha149.displayutils.utilityclasses.npc.NPC;
-import de.rapha149.displayutils.utilityclasses.scoreboard.TeamOptions;
+import de.rapha149.displayutils.display.npc.NPC;
+import de.rapha149.displayutils.display.scoreboard.TeamOptions;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
