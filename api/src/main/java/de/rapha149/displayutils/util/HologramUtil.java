@@ -272,7 +272,7 @@ public class HologramUtil {
      * @param name The name to set.
      */
     private static void setCustomName(ArmorStand armorStand, String name) {
-        if (name == null || name.trim().isEmpty()) {
+        if (name.trim().isEmpty()) {
             armorStand.setCustomNameVisible(false);
             armorStand.setCustomName("");
         } else {

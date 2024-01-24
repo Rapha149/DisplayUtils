@@ -35,7 +35,7 @@ public class HologramBuilder {
         Objects.requireNonNull(loc, "The location cannot be null");
 
         this.identifier = identifier;
-        this.lines = lines;
+        this.lines = lines.stream().map(line -> line != null ? line : "").collect(Collectors.toList());
         this.loc = loc;
     }
 

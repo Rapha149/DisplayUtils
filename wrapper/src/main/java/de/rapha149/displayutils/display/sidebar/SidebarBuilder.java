@@ -35,7 +35,7 @@ public class SidebarBuilder {
         Objects.requireNonNull(lines, "The lines cannot be null");
 
         this.title = title;
-        this.lines = lines;
+        this.lines = lines.stream().map(line -> line != null ? line : "").collect(Collectors.toList());
     }
 
     /**
