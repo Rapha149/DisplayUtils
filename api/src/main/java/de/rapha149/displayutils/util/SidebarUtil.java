@@ -113,7 +113,16 @@ public class SidebarUtil {
         List<String> lines = sidebar.getGeneralModifier() != null ? sidebar.getGeneralModifier().modify(sidebar.getLines()) : sidebar.getLines();
         List<Player> uninitialized = players.stream().filter(player -> !initializedPlayers.contains(player.getUniqueId())).collect(Collectors.toList());
         if (!uninitialized.isEmpty()) {
-            Object objective = wrapper.newObjective(scoreboard, "sidebar", sidebar.getTitle());
+            String title = sidebar.getTitle();
+            int maxTitleLength = wrapper.getMaxObjetiveDisplayNameLength();
+            if (title.length() > maxTitleLength) {
+                String newTitle = title.substring(0, maxTitleLength);
+                if (newTitle.endsWith("§") && STARTSWITH_COLOR_CHAR.matcher(title.substring(maxTitleLength)).find())
+                    newTitle = newTitle.substring(0, newTitle.length() - 1);
+                title = newTitle;
+            }
+
+            Object objective = wrapper.newObjective(scoreboard, "sidebar", title);
 
             List<Object> initPackets = new ArrayList<>(Arrays.asList(
                     wrapper.getObjectiveActionPacket(objective, ScoreboardAction.CREATE),
