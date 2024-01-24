@@ -39,8 +39,6 @@ public class TeamOptions {
     }
 
     /**
-     * Gets the prefix of the team.
-     *
      * @return The prefix of the team.
      */
     public String getPrefix() {
@@ -48,8 +46,6 @@ public class TeamOptions {
     }
 
     /**
-     * Gets the suffix of the team.
-     *
      * @return The suffix of the team.
      */
     public String getSuffix() {
@@ -57,8 +53,6 @@ public class TeamOptions {
     }
 
     /**
-     * Gets the color of the team.
-     *
      * @return The color of the team.
      */
     public ChatColor getColor() {
@@ -66,8 +60,6 @@ public class TeamOptions {
     }
 
     /**
-     * Returns whether the team allows friendly fire.
-     *
      * @return True if the team allows friendly fire, false otherwise.
      */
     public boolean isFriendlyFire() {
@@ -75,8 +67,6 @@ public class TeamOptions {
     }
 
     /**
-     * Returns whether the team can see friendly invisibles.
-     *
      * @return True if the team can see friendly invisibles, false otherwise.
      */
     public boolean isSeeFriendlyInvisibles() {
@@ -84,8 +74,6 @@ public class TeamOptions {
     }
 
     /**
-     * Gets the collision rule of the team.
-     *
      * @return The collision rule of the team.
      */
     public TeamCollisionRule getCollisionRule() {
@@ -93,8 +81,6 @@ public class TeamOptions {
     }
 
     /**
-     * Gets the name tag visibility option of the team.
-     *
      * @return The name tag visibility option of the team.
      */
     public TeamVisibilityOption getNameTagVisibility() {
@@ -102,8 +88,6 @@ public class TeamOptions {
     }
 
     /**
-     * Gets the death message visibility option of the team.
-     *
      * @return The death message visibility option of the team.
      */
     public TeamVisibilityOption getDeathMessageVisibility() {

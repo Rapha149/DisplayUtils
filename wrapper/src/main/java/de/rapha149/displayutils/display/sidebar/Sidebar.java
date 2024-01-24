@@ -40,7 +40,6 @@ public class Sidebar {
     }
 
     /**
-     * Returns the lines of the sidebar.
      * @return The lines of the sidebar. May contain placeholders (%placeholder%).
      */
     public List<String> getLines() {
@@ -64,7 +63,6 @@ public class Sidebar {
     }
 
     /**
-     * Returns the interval in ticks in which the content of the sidebar is updated.
      * @return The interval in ticks in which the content of the sidebar is updated. If this is null, the content should not be automatically updated.
      */
     public Integer getUpdateInterval() {

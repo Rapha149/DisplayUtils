@@ -3,7 +3,6 @@ package de.rapha149.displayutils.display.npc;
 import org.bukkit.Location;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -60,7 +59,6 @@ public class NPC {
     }
 
     /**
-     * Returns the identifier of the NPC.
      * @return The unique identifier of the NPC.
      */
     public String getIdentifier() {
@@ -68,7 +66,6 @@ public class NPC {
     }
 
     /**
-     * Returns the name of the NPC.
      * @return The name of the NPC.
      */
     public String getName() {
@@ -76,15 +73,14 @@ public class NPC {
     }
 
     /**
-     * Returns the skin of the NPC.
-     * @return The skin of the NPC. See {@link NPCSkin} for more information.
+     * @return The skin of the NPC.
+     * @see NPCSkin
      */
     public NPCSkin getSkin() {
         return skin;
     }
 
     /**
-     * Returns the location of the NPC.
      * @return The location of the NPC.
      */
     public Location getLoc() {
@@ -106,7 +102,6 @@ public class NPC {
     }
 
     /**
-     * Checks whether the NPC is sneaking.
      * @return True if the NPC is sneaking, false otherwise.
      */
     public boolean isSneaking() {
@@ -114,7 +109,6 @@ public class NPC {
     }
 
     /**
-     * Checks whether the NPC is collidable.
      * @return True if the NPC is collidable, false otherwise.
      */
     public boolean isCollidable() {
@@ -122,7 +116,6 @@ public class NPC {
     }
 
     /**
-     * Checks whether the NPC's name tag is visible.
      * @return True if the NPC's name tag is visible, false otherwise.
      */
     public boolean isNameTagVisible() {
@@ -130,7 +123,6 @@ public class NPC {
     }
 
     /**
-     * Checks whether the NPC's sneaking state should be matched with each player's sneaking state.
      * @return True if the NPC's sneaking state should be matched with each player's sneaking state, false otherwise.
      */
     public boolean isMatchSneakingWithPlayer() {
@@ -138,7 +130,6 @@ public class NPC {
     }
 
     /**
-     * Checks whether the NPC should look at each player.
      * @return True if the NPC should look at each player, false otherwise.
      */
     public boolean isLookAtPlayer() {
@@ -146,7 +137,6 @@ public class NPC {
     }
 
     /**
-     * Returns the listener that is called when the NPC is used.
      * @return The listener that is called when the NPC is used.
      */
     public NPCUseListener getUseListener() {
@@ -154,7 +144,6 @@ public class NPC {
     }
 
     /**
-     * Returns the cooldown of the listener in ticks.
      * @return The cooldown of the listener in ticks.
      */
     public int getListenerCooldown() {

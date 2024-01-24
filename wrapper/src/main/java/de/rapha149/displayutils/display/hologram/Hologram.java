@@ -44,7 +44,6 @@ public class Hologram {
     }
 
     /**
-     * Returns the identifier of the hologram.
      * @return The unique identifier of the hologram.
      */
     public String getIdentifier() {
@@ -52,15 +51,13 @@ public class Hologram {
     }
 
     /**
-     * Returns the lines of the hologram.
-     * @return The lines of the hologram. May contain placeholders (%placeholder%).
+     * @return The lines of the hologram.
      */
     public List<String> getLines() {
         return lines;
     }
 
     /**
-     * Returns the location of the hologram.
      * @return The location of the hologram (the location of the first line).
      */
     public Location getLoc() {
@@ -84,7 +81,6 @@ public class Hologram {
     }
 
     /**
-     * Returns the interval in ticks in which the content of the hologram is updated.
      * @return The interval in ticks in which the content of the hologram is updated. If this is null, the content should not be automatically updated.
      */
     public Integer getUpdateInterval() {

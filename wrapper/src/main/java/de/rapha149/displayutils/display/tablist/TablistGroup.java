@@ -38,7 +38,6 @@ public class TablistGroup {
     }
 
     /**
-     * Gets the TeamOptions for the team.
      * @return The TeamOptions for the team.
      */
     public TeamOptions getTeamOptions() {
@@ -46,7 +45,6 @@ public class TablistGroup {
     }
 
     /**
-     * Gets the players in the group.
      * @return The players in the group.
      */
     public List<String> getPlayers() {
@@ -54,7 +52,6 @@ public class TablistGroup {
     }
 
     /**
-     * Returns whether the players should be ordered by the order in the list or by their name.
      * @return True if the players should be ordered by the order in the list, false if they should be ordered by their name.
      */
     public boolean isCustomPlayerOrder() {

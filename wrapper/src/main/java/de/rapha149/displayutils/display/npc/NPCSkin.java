@@ -25,7 +25,6 @@ public class NPCSkin {
     }
 
     /**
-     * Returns the texture of the NPC's skin.
      * @return The texture of the NPC's skin.
      */
     public String getTexture() {
@@ -33,7 +32,6 @@ public class NPCSkin {
     }
 
     /**
-     * Returns the signature of the NPC's skin.
      * @return The signature of the NPC's skin.
      */
     public String getSignature() {
@@ -41,7 +39,6 @@ public class NPCSkin {
     }
 
     /**
-     * Returns the list of enabled parts of the NPC's skin.
      * @return The list of enabled parts of the NPC's skin.
      */
     public List<NPCSkinPart> getEnabledParts() {
@@ -70,16 +67,14 @@ public class NPCSkin {
         }
 
         /**
-         * Returns the bit of the NPCSkinPart. This is used in the metadata packet.
-         * @return The bit of the NPCSkinPart.
+         * @return The bit of the NPCSkinPart. This is used in the metadata packet.
          */
         public int getBit() {
             return bit;
         }
 
         /**
-         * Returns the default parts of an NPC's skin. These are all parts except the cape.
-         * @return The default parts of an NPC's skin.
+         * @return The default parts of an NPC's skin. These are all parts except the cape.
          */
         public static List<NPCSkinPart> getDefaultParts() {
             return defaultParts;
