@@ -18,7 +18,7 @@ public class TablistGroup {
      * Constructs a new TablistGroup.
      * @param identifier The identifier of the group. This is used to identify the group when updating the tablist.
      * @param teamOptions The {@link TeamOptions} for the team.
-     * @param players The players in the group.
+     * @param players The names of the players in the group.
      * @param customPlayerOrder Whether the players should be ordered by the order in the list or by their name.
      */
     public TablistGroup(String identifier, TeamOptions teamOptions, List<String> players, boolean customPlayerOrder) {

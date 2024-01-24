@@ -18,6 +18,8 @@ public class TeamOptionsBuilder {
 
     /**
      * Sets the prefix of the team.
+     * A prefix longer than 16 (up to 1.12) or 64 (since 1.13) characters may result in the player being kicked.
+     *
      * @param prefix The prefix of the team.
      * @return The {@link TeamOptionsBuilder} instance.
      */
@@ -28,6 +30,7 @@ public class TeamOptionsBuilder {
 
     /**
      * Sets the suffix of the team.
+     * A suffix longer than 16 (up to 1.12) or 64 (since 1.13) characters may result in the player being kicked.
      *
      * @param suffix The suffix of the team.
      * @return The {@link TeamOptionsBuilder} instance.
@@ -38,7 +41,9 @@ public class TeamOptionsBuilder {
     }
 
     /**
-     * Sets the color of the team.
+     * Sets the color of the team. <p>
+     * Please note that in older versions of Minecraft, this color is not displayed in the tablist.
+     * In order to change the color of the team in the tablist, set the final color of the prefix to your desired color.
      *
      * @param color The color of the team.
      * @return The {@link TeamOptionsBuilder} instance.
