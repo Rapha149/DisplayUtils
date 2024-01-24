@@ -5,7 +5,7 @@ import org.bukkit.ChatColor;
 /**
  * A builder for {@link TeamOptions}.
  */
-public class TeamOptionsBuilder implements Cloneable {
+public class TeamOptionsBuilder {
 
     private String prefix = "";
     private String suffix = "";
@@ -109,15 +109,5 @@ public class TeamOptionsBuilder implements Cloneable {
      */
     public TeamOptions build() {
         return new TeamOptions(prefix, suffix, color, friendlyFire, seeFriendlyInvisibles, collisionRule, nameTagVisibility, deathMessageVisibility);
-    }
-
-    @Override
-    public TeamOptionsBuilder clone() {
-        try {
-            TeamOptionsBuilder clone = (TeamOptionsBuilder) super.clone();
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
     }
 }
