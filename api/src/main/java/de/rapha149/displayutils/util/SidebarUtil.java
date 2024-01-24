@@ -2,7 +2,6 @@ package de.rapha149.displayutils.util;
 
 import de.rapha149.displayutils.display.scoreboard.TeamOptionsBuilder;
 import de.rapha149.displayutils.display.sidebar.Sidebar;
-import de.rapha149.displayutils.display.sidebar.SidebarPlaceholders;
 import de.rapha149.displayutils.version.ScoreboardAction;
 import de.rapha149.displayutils.version.ScoreboardPosition;
 import org.bukkit.Bukkit;
@@ -14,7 +13,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static de.rapha149.displayutils.util.DisplayUtils.*;
@@ -39,15 +37,15 @@ public class SidebarUtil {
     }
 
     /**
-     * Sets the sidebar for all players.
-     * @param sidebar The sidebar to set
+     * Sets the sidebar for all players. Overwrites the previous sidebar if there was one.
+     * @param sidebar The sidebar to set. Create with {@link de.rapha149.displayutils.display.sidebar.SidebarBuilder}.
      */
     public static void setSidebar(Sidebar sidebar) {
         checkUsable();
 
         removeSidebar();
         SidebarUtil.sidebar = sidebar;
-        if (sidebar.isPlayerSpecific())
+        if (sidebar.hasPlayerModifier())
             previousPlayerLines = new HashMap<>();
         updateSidebar();
 
@@ -72,15 +70,7 @@ public class SidebarUtil {
         previousPlayerLines = null;
 
         // remove all scores and teams
-        List<Object> packets = new ArrayList<>();
-
-        Object scoreboard = wrapper.newScoreboard();
-        packets.add(wrapper.getObjectiveActionPacket(wrapper.newObjective(scoreboard, "sidebar", null), ScoreboardAction.REMOVE));
-        if (teams != null) {
-            for (Object team : teams)
-                packets.add(wrapper.getTeamActionPacket(team, ScoreboardAction.REMOVE));
-        }
-
+        List<Object> packets = getRemovePackets();
         Bukkit.getOnlinePlayers().forEach(player -> wrapper.sendPackets(player, packets));
     }
 
@@ -92,18 +82,34 @@ public class SidebarUtil {
         if (sidebar == null || Bukkit.getOnlinePlayers().isEmpty())
             return;
 
-        boolean playerSpecific = sidebar.isPlayerSpecific();
-        Collection<? extends Player> players = Bukkit.getOnlinePlayers();
+        List<UUID> allowedPlayers = sidebar.getPlayers();
+        boolean filterPlayers = allowedPlayers != null;
+        if (filterPlayers && !initializedPlayers.isEmpty()) {
+            List<Object> packets = getRemovePackets();
+            initializedPlayers.removeIf(uuid -> {
+                if (!allowedPlayers.contains(uuid)) {
+                    Player player = Bukkit.getPlayer(uuid);
+                    if (player != null)
+                        wrapper.sendPackets(player, packets);
+                    return true;
+                }
+
+                return false;
+            });
+        }
+
+        List<Player> players = Bukkit.getOnlinePlayers().stream().filter(player -> !filterPlayers || allowedPlayers.contains(player.getUniqueId())).collect(Collectors.toList());
+        if (players.isEmpty())
+            return;
+
+        boolean playerSpecific = sidebar.hasPlayerModifier();
         Map<Player, List<Object>> packets = new HashMap<>();
         Object scoreboard = wrapper.newScoreboard();
 
-        List<String> lines = sidebar.getLines();
-        Function<SidebarPlaceholders, List<String>> applyPlaceholders = placeholders -> lines.stream().map(placeholders::apply).collect(Collectors.toList());
-        List<String> generalLines = playerSpecific ? null : applyPlaceholders.apply(sidebar.getProvider().getPlaceholders());
-
+        List<String> lines = sidebar.getGeneralModifier() != null ? sidebar.getGeneralModifier().modify(sidebar.getLines()) : sidebar.getLines();
         List<Player> uninitialized = players.stream().filter(player -> !initializedPlayers.contains(player.getUniqueId())).collect(Collectors.toList());
         if (!uninitialized.isEmpty()) {
-            Object objective = wrapper.newObjective(scoreboard, "sidebar", sidebar.getName());
+            Object objective = wrapper.newObjective(scoreboard, "sidebar", sidebar.getTitle());
 
             List<Object> initPackets = new ArrayList<>(Arrays.asList(
                     wrapper.getObjectiveActionPacket(objective, ScoreboardAction.CREATE),
@@ -113,7 +119,7 @@ public class SidebarUtil {
                 String name = SCORE_NAMES.get(i);
                 initPackets.add(wrapper.getChangeScorePacket(scoreboard, objective, name, lines.size() - i));
 
-                Object team = getTeam(scoreboard, i, playerSpecific ? "" : generalLines.get(i));
+                Object team = getTeam(scoreboard, i, playerSpecific ? "" : lines.get(i));
                 initPackets.add(wrapper.getTeamActionPacket(team, ScoreboardAction.CREATE));
                 initPackets.add(wrapper.getTeamPlayerActionPacket(team, Collections.singletonList(name), true));
             }
@@ -128,7 +134,7 @@ public class SidebarUtil {
             for (Player player : players) {
                 UUID uuid = player.getUniqueId();
 
-                List<String> playerLines = applyPlaceholders.apply(sidebar.getProvider().getPlaceholders(player));
+                List<String> playerLines = sidebar.getPlayerModifier().modify(player, lines);
                 List<String> previousLines = previousPlayerLines.get(uuid);
 
                 for (int i = 0; i < playerLines.size(); i++) {
@@ -141,8 +147,8 @@ public class SidebarUtil {
             }
         } else {
             List<Object> generalPackets = new ArrayList<>();
-            for (int i = 0; i < generalLines.size(); i++) {
-                String line = generalLines.get(i);
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
                 if (previousGeneralLines == null || !previousGeneralLines.get(i).equals(line))
                     generalPackets.add(wrapper.getTeamActionPacket(getTeam(scoreboard, i, line), ScoreboardAction.UPDATE));
             }
@@ -152,7 +158,7 @@ public class SidebarUtil {
                     packets.put(player, generalPackets);
             }
 
-            previousGeneralLines = generalLines;
+            previousGeneralLines = lines;
         }
 
         packets.forEach(wrapper::sendPackets);
@@ -182,6 +188,21 @@ public class SidebarUtil {
     }
 
     /**
+     * Internal method. Returns the packets to remove the sidebar.
+     * @return A list of packets to remove the sidebar.
+     */
+    private static List<Object> getRemovePackets() {
+        List<Object> packets = new ArrayList<>();
+        Object scoreboard = wrapper.newScoreboard();
+        packets.add(wrapper.getObjectiveActionPacket(wrapper.newObjective(scoreboard, "sidebar", null), ScoreboardAction.REMOVE));
+        if (teams != null) {
+            for (Object team : teams)
+                packets.add(wrapper.getTeamActionPacket(team, ScoreboardAction.REMOVE));
+        }
+        return packets;
+    }
+
+    /**
      * Internal listener that handles player joins and quits.
      */
     private static class SidebarListener implements Listener {
@@ -198,7 +219,7 @@ public class SidebarUtil {
 
             UUID uuid = event.getPlayer().getUniqueId();
             initializedPlayers.remove(uuid);
-            if (sidebar.isPlayerSpecific())
+            if (sidebar.hasPlayerModifier())
                 previousPlayerLines.remove(uuid);
         }
     }

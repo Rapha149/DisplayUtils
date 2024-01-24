@@ -90,8 +90,7 @@ public class HologramUtil {
 
     /**
      * Updates all holograms.
-     * This will call the {@link de.rapha149.displayutils.display.hologram.provider.HologramContentProvider} and
-     * the player supplier if it exists of each hologram and send the updated lines to all players that can see the hologram.
+     * This will call the general / player content modifier and the player supplier if it exists of each hologram and send the updated lines to all players that can see the hologram.
      */
     public static void updateHolograms() {
         checkUsable();
@@ -100,8 +99,7 @@ public class HologramUtil {
 
     /**
      * Updates a specific hologram.
-     * This will call the {@link de.rapha149.displayutils.display.hologram.provider.HologramContentProvider} and
-     * the player supplier if it exists of the hologram and send the updated lines to all players that can see the hologram.
+     * This will call the general / player content modifier and the player supplier if it exists of each hologram and send the updated lines to all players that can see the hologram.
      *
      * @param identifier The identifier of the hologram to update.
      */
@@ -139,12 +137,9 @@ public class HologramUtil {
         if (players.isEmpty())
             return;
 
-        boolean playerSpecific = hologram.isPlayerSpecific();
         Map<Player, List<Object>> packets = new HashMap<>();
-
-        List<String> lines = hologram.getLines();
-        Function<HologramPlaceholders, List<String>> applyPlaceholders = placeholders -> lines.stream().map(placeholders::apply).collect(Collectors.toList());
-        List<String> generalLines = playerSpecific ? null : applyPlaceholders.apply(hologram.getProvider().getPlaceholders());
+        boolean playerSpecific = hologram.hasPlayerModifier();
+        List<String> lines = hologram.getGeneralModifier() != null ? hologram.getGeneralModifier().modify(hologram.getLines()) : hologram.getLines();
 
         List<Player> uninitialized = players.stream().filter(player -> !data.initializedPlayers.contains(player.getUniqueId())).collect(Collectors.toList());
         if (!uninitialized.isEmpty()) {
@@ -169,7 +164,7 @@ public class HologramUtil {
             for (Player player : players) {
                 UUID uuid = player.getUniqueId();
 
-                List<String> playerLines = applyPlaceholders.apply(hologram.getProvider().getPlaceholders(player));
+                List<String> playerLines = hologram.getPlayerModifier().modify(player, lines);
                 List<String> previousLines = previousPlayerLines.get(uuid);
 
                 for (int i = 0; i < playerLines.size(); i++) {
@@ -186,8 +181,8 @@ public class HologramUtil {
             List<String> previousLines = generalData.previousLines;
 
             List<Object> generalPackets = new ArrayList<>();
-            for (int i = 0; i < generalLines.size(); i++) {
-                String line = generalLines.get(i);
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
                 if (previousLines == null || !previousLines.get(i).equals(line)) {
                     ArmorStand armorStand = data.armorStands.get(i);
                     armorStand.setCustomName(line);
@@ -200,7 +195,7 @@ public class HologramUtil {
                     packets.put(player, generalPackets);
             }
 
-            generalData.previousLines = generalLines;
+            generalData.previousLines = lines;
         }
 
         packets.forEach(wrapper::sendPackets);
@@ -221,12 +216,13 @@ public class HologramUtil {
         if (players != null && players.contains(uuid))
             return;
 
-        if (hologram.isPlayerSpecific() && !data.initializedPlayers.contains(uuid)) {
+        boolean playerSpecific = hologram.hasPlayerModifier();
+        if (playerSpecific && !data.initializedPlayers.contains(uuid)) {
             updateHologram(data);
             return;
         }
 
-        List<String> lines = hologram.isPlayerSpecific() ? ((PlayerHologramData) data).previousLines.get(uuid) : ((GeneralHologramData) data).previousLines;
+        List<String> lines = playerSpecific ? ((PlayerHologramData) data).previousLines.get(uuid) : ((GeneralHologramData) data).previousLines;
         if (lines == null) {
             data.initializedPlayers.remove(uuid);
             updateHologram(data);
@@ -279,7 +275,7 @@ public class HologramUtil {
             UUID uuid = event.getPlayer().getUniqueId();
             for (HologramData data : holograms.values()) {
                 data.initializedPlayers.remove(uuid);
-                if (data.hologram.isPlayerSpecific())
+                if (data.hologram.hasPlayerModifier())
                     ((PlayerHologramData) data).previousLines.remove(uuid);
             }
         }

@@ -1,8 +1,7 @@
 package de.rapha149.displayutils.display.hologram;
 
-import de.rapha149.displayutils.display.hologram.provider.GeneralHologramContentProvider;
-import de.rapha149.displayutils.display.hologram.provider.HologramContentProvider;
-import de.rapha149.displayutils.display.hologram.provider.PlayerHologramContentProvider;
+import de.rapha149.displayutils.display.hologram.content.GeneralHologramContentModifier;
+import de.rapha149.displayutils.display.hologram.content.PlayerHologramContentModifier;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -17,8 +16,8 @@ public class HologramBuilder {
     private String identifier;
     private List<String> lines;
     private Location loc;
-    private HologramContentProvider provider = (GeneralHologramContentProvider) HologramPlaceholders::new;
-    private boolean playerSpecific = false;
+    private GeneralHologramContentModifier generalModifier;
+    private PlayerHologramContentModifier playerModifier;
     private Integer updateInterval = null;
     private List<UUID> players = null;
     private Supplier<List<UUID>> playersSupplier = null;
@@ -41,34 +40,32 @@ public class HologramBuilder {
     }
 
     /**
-     * Sets the provider that is used to get the placeholder values of the hologram.
+     * Sets the modifier that can be used to update the lines of the hologram without re-adding it.
      * Use this method if the content of the hologram is the same for all players.
-     * @param provider The provider.
+     * @param generalModifier The modifier.
      * @return The {@link HologramBuilder} instance.
-     * @throws java.lang.NullPointerException If the provider is null.
-     * @see #setSpecificPlayerProvider(PlayerHologramContentProvider)
+     * @throws java.lang.NullPointerException If the modifier is null.
+     * @see #setPlayerContentModifier(PlayerHologramContentModifier)
      */
-    public HologramBuilder setGeneralProvider(GeneralHologramContentProvider provider) {
-        Objects.requireNonNull(provider, "The provider cannot be null");
+    public HologramBuilder setGeneralContentModifier(GeneralHologramContentModifier generalModifier) {
+        Objects.requireNonNull(generalModifier, "The modifier cannot be null");
 
-        this.provider = provider;
-        this.playerSpecific = false;
+        this.generalModifier = generalModifier;
         return this;
     }
 
     /**
-     * Sets the provider that is used to get the placeholder values of the hologram.
+     * Sets the modifier that can be used to update the lines of the hologram without re-adding it.
      * Use this method if the content of the hologram is different for each player.
-     * @param provider The provider.
+     * @param playerModifier The modifier.
      * @return The {@link HologramBuilder} instance.
-     * @throws java.lang.NullPointerException If the provider is null.
-     * @see #setGeneralProvider(GeneralHologramContentProvider)
+     * @throws java.lang.NullPointerException If the playerModifier is null.
+     * @see #setGeneralContentModifier(GeneralHologramContentModifier)
      */
-    public HologramBuilder setSpecificPlayerProvider(PlayerHologramContentProvider provider) {
-        Objects.requireNonNull(provider, "The provider cannot be null");
+    public HologramBuilder setPlayerContentModifier(PlayerHologramContentModifier playerModifier) {
+        Objects.requireNonNull(playerModifier, "The modifier cannot be null");
 
-        this.provider = provider;
-        this.playerSpecific = true;
+        this.playerModifier = playerModifier;
         return this;
     }
 
@@ -121,8 +118,8 @@ public class HologramBuilder {
      * @return The {@link HologramBuilder} instance.
      * @throws java.lang.NullPointerException If the players supplier is null.
      * @see #setPlayers(List)
-     * @see #setPlayerUUIDs(List) 
-     * @see #setPlayerUUIDSupplier(Supplier) 
+     * @see #setPlayerUUIDs(List)
+     * @see #setPlayerUUIDSupplier(Supplier)
      */
     public HologramBuilder setPlayerSupplier(Supplier<List<Player>> playersSupplier) {
         Objects.requireNonNull(playersSupplier, "The players supplier cannot be null");
@@ -130,7 +127,7 @@ public class HologramBuilder {
         this.playersSupplier = () -> playersSupplier.get().stream().map(Player::getUniqueId).collect(Collectors.toList());
         return this;
     }
-    
+
     /**
      * Sets a supplier that is used to get the players that can see the hologram. All other players won't be able to see it.
      * The supplier will be called every time the hologram is updated.
@@ -139,9 +136,9 @@ public class HologramBuilder {
      * @param uuidsSupplier The supplier that is used to get the uuids of the players that can see the hologram.
      * @return The {@link HologramBuilder} instance.
      * @throws java.lang.NullPointerException If the players supplier is null.
-     * @see #setPlayers(List) 
-     * @see #setPlayerUUIDs(List) 
-     * @see #setPlayerSupplier(Supplier) 
+     * @see #setPlayers(List)
+     * @see #setPlayerUUIDs(List)
+     * @see #setPlayerSupplier(Supplier)
      */
     public HologramBuilder setPlayerUUIDSupplier(Supplier<List<UUID>> uuidsSupplier) {
         Objects.requireNonNull(uuidsSupplier, "The players supplier cannot be null");
@@ -152,9 +149,9 @@ public class HologramBuilder {
 
     /**
      * Builds the hologram.
-     * @return The hologram.
+     * @return The {@link Hologram} instance.
      */
     public Hologram build() {
-        return new Hologram(identifier, lines, loc, provider, playerSpecific, updateInterval, players, playersSupplier);
+        return new Hologram(identifier, lines, loc, generalModifier, playerModifier, updateInterval, players, playersSupplier);
     }
 }

@@ -1,64 +1,66 @@
 package de.rapha149.displayutils.display.sidebar;
 
-import de.rapha149.displayutils.display.hologram.HologramBuilder;
-import de.rapha149.displayutils.display.sidebar.provider.GeneralSidebarContentProvider;
-import de.rapha149.displayutils.display.sidebar.provider.PlayerSidebarContentProvider;
-import de.rapha149.displayutils.display.sidebar.provider.SidebarContentProvider;
+import de.rapha149.displayutils.display.sidebar.content.GeneralSidebarContentModifier;
+import de.rapha149.displayutils.display.sidebar.content.PlayerSidebarContentProvider;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class SidebarBuilder {
 
-    private String name;
+    private String title;
     private List<String> lines;
-    private SidebarContentProvider provider = (GeneralSidebarContentProvider) SidebarPlaceholders::new;
-    private boolean playerSpecific = false;
+    private GeneralSidebarContentModifier generalModifier = null;
+    private PlayerSidebarContentProvider playerModifier = null;
     private Integer updateInterval = null;
+    private List<UUID> players = null;
+    private Supplier<List<UUID>> playersSupplier = null;
 
     /**
      * Constructs a new SidebarBuilder.
-     * @param name The name of the sidebar. Will be shown above the lines.
+     * @param title The title of the sidebar. Will be shown above the lines.
      * @param lines The lines of the sidebar. May contain placeholder (%placeholder%). If there are more than 15 lines, the last lines will be ignored.
      * @throws java.lang.NullPointerException If the name or the lines are null.
      */
-    public SidebarBuilder(String name, List<String> lines) {
-        Objects.requireNonNull(name, "The name cannot be null");
+    public SidebarBuilder(String title, List<String> lines) {
+        Objects.requireNonNull(title, "The name cannot be null");
         Objects.requireNonNull(lines, "The lines cannot be null");
 
-        this.name = name;
+        this.title = title;
         this.lines = lines;
     }
 
     /**
-     * Sets the provider that is used to get the placeholder values of the sidebar.
+     * Sets the modifier that can be used to update the lines of the sidebar without re-adding it.
      * Use this method if the content of the sidebar is the same for all players.
-     * @param provider The provider.
-     * @return The {@link HologramBuilder} instance.
-     * @throws java.lang.NullPointerException If the provider is null.
-     * @see #setSpecificPlayerProvider(PlayerSidebarContentProvider)
+     * @param generalModifier The modifier.
+     * @return The {@link SidebarBuilder} instance.
+     * @throws java.lang.NullPointerException If the modifier is null.
+     * @see #setPlayerContentModifier(PlayerSidebarContentProvider)
      */
-    public SidebarBuilder setGeneralProvider(GeneralSidebarContentProvider provider) {
-        Objects.requireNonNull(provider, "The provider cannot be null");
+    public SidebarBuilder setGeneralContentModifier(GeneralSidebarContentModifier generalModifier) {
+        Objects.requireNonNull(generalModifier, "The modifier cannot be null");
 
-        this.provider = provider;
-        this.playerSpecific = false;
+        this.generalModifier = generalModifier;
         return this;
     }
 
     /**
-     * Sets the provider that is used to get the placeholder values of the sidebar.
+     * Sets the modifier that is used to get the placeholder values of the sidebar.
      * Use this method if the content of the sidebar is different for each player.
-     * @param provider The provider.
-     * @return The {@link HologramBuilder} instance.
-     * @throws java.lang.NullPointerException If the provider is null.
-     * @see #setGeneralProvider(GeneralSidebarContentProvider)
+     * @param playerModifier The modifier.
+     * @return The {@link SidebarBuilder} instance.
+     * @throws java.lang.NullPointerException If the modifier is null.
+     * @see #setGeneralContentModifier(GeneralSidebarContentModifier)
      */
-    public SidebarBuilder setSpecificPlayerProvider(PlayerSidebarContentProvider provider) {
-        Objects.requireNonNull(provider, "The provider cannot be null");
+    public SidebarBuilder setPlayerContentModifier(PlayerSidebarContentProvider playerModifier) {
+        Objects.requireNonNull(playerModifier, "The modifier cannot be null");
 
-        this.provider = provider;
-        this.playerSpecific = true;
+        this.playerModifier = playerModifier;
         return this;
     }
 
@@ -76,7 +78,75 @@ public class SidebarBuilder {
         return this;
     }
 
+    /**
+     * Sets the players that can see the sidebar. All other players won't be able to see it.
+     * @param players The players that can see the sidebar.
+     * @return The {@link SidebarBuilder} instance.
+     * @see #setPlayerUUIDs(List)
+     * @see #setPlayerSupplier(Supplier)
+     * @see #setPlayerUUIDSupplier(Supplier)
+     */
+    public SidebarBuilder setPlayers(List<Player> players) {
+        this.players = players.stream().map(Player::getUniqueId).collect(Collectors.toList());
+        return this;
+    }
+
+    /**
+     * Sets the players that can see the sidebar. All other players won't be able to see it.
+     * @param uuids The uuids of the players that can see the sidebar.
+     * @return The {@link SidebarBuilder} instance.
+     * @see #setPlayers(List)
+     * @see #setPlayerSupplier(Supplier)
+     * @see #setPlayerUUIDSupplier(Supplier)
+     */
+    public SidebarBuilder setPlayerUUIDs(List<UUID> uuids) {
+        this.players = uuids;
+        return this;
+    }
+
+    /**
+     * Sets a supplier that is used to get the players that can see the sidebar. All other players won't be able to see it.
+     * The supplier will be called every time the sidebar is updated.
+     * This overrides the players that are set with {@link #setPlayers(List)}.
+     *
+     * @param playersSupplier The supplier that is used to get the players that can see the sidebar.
+     * @return The {@link SidebarBuilder} instance.
+     * @throws java.lang.NullPointerException If the players supplier is null.
+     * @see #setPlayers(List)
+     * @see #setPlayerUUIDs(List)
+     * @see #setPlayerUUIDSupplier(Supplier)
+     */
+    public SidebarBuilder setPlayerSupplier(Supplier<List<Player>> playersSupplier) {
+        Objects.requireNonNull(playersSupplier, "The players supplier cannot be null");
+
+        this.playersSupplier = () -> playersSupplier.get().stream().map(Player::getUniqueId).collect(Collectors.toList());
+        return this;
+    }
+
+    /**
+     * Sets a supplier that is used to get the players that can see the sidebar. All other players won't be able to see it.
+     * The supplier will be called every time the sidebar is updated.
+     * This overrides the players that are set with {@link #setPlayers(List)}.
+     *
+     * @param uuidsSupplier The supplier that is used to get the uuids of the players that can see the sidebar.
+     * @return The {@link SidebarBuilder} instance.
+     * @throws java.lang.NullPointerException If the players supplier is null.
+     * @see #setPlayers(List)
+     * @see #setPlayerUUIDs(List)
+     * @see #setPlayerSupplier(Supplier)
+     */
+    public SidebarBuilder setPlayerUUIDSupplier(Supplier<List<UUID>> uuidsSupplier) {
+        Objects.requireNonNull(uuidsSupplier, "The players supplier cannot be null");
+
+        this.playersSupplier = uuidsSupplier;
+        return this;
+    }
+
+    /**
+     * Builds the sidebar.
+     * @return The {@link Sidebar} instance.
+     */
     public Sidebar build() {
-        return new Sidebar(name, lines, provider, playerSpecific, updateInterval);
+        return new Sidebar(title, lines, generalModifier, playerModifier, updateInterval, players, playersSupplier);
     }
 }

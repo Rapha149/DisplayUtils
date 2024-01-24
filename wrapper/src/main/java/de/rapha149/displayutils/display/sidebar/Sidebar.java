@@ -1,42 +1,50 @@
 package de.rapha149.displayutils.display.sidebar;
 
-import de.rapha149.displayutils.display.sidebar.provider.SidebarContentProvider;
+import de.rapha149.displayutils.display.sidebar.content.GeneralSidebarContentModifier;
+import de.rapha149.displayutils.display.sidebar.content.PlayerSidebarContentProvider;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.function.Supplier;
 
 /**
  * A class holding information about the sidebar.
  */
 public class Sidebar {
 
-    private final String name;
+    private final String title;
     private final List<String> lines;
-    private final SidebarContentProvider provider;
-    private final boolean playerSpecific;
+    private final GeneralSidebarContentModifier generalModifier;
+    private final PlayerSidebarContentProvider playerModifier;
     private final Integer updateInterval;
+    private final List<UUID> players;
+    private final Supplier<List<UUID>> playersSupplier;
 
     /**
      * Use the {@link SidebarBuilder} to create a new Sidebar.
-     * @param name The name of the sidebar.
+     * @param title The title of the sidebar.
      * @param lines The lines of the sidebar. May contain placeholders (%placeholder%).
-     * @param provider The provider that is used to get the content of the sidebar.
-     * @param playerSpecific Whether the content of the sidebar is different for each player.
+     * @param generalModifier The general modifier that is used to update the lines of the sidebar.
+     * @param playerModifier The player specific modifier that is used to update the lines of the sidebar.
      * @param updateInterval The interval in ticks in which the content of the sidebar is updated. If this is null, the content is not automatically updated.
+     * @param players The players that can see the sidebar. All other players won't be able to see it. If this is null, all players will be able to see the sidebar.
+     * @param playersSupplier The supplier that is used to get the players that can see the sidebar. All other players won't be able to see it. If this is null, the parameter players is used.
      */
-    Sidebar(String name, List<String> lines, SidebarContentProvider provider, boolean playerSpecific, Integer updateInterval) {
-        this.name = name;
+    Sidebar(String title, List<String> lines, GeneralSidebarContentModifier generalModifier, PlayerSidebarContentProvider playerModifier, Integer updateInterval, List<UUID> players, Supplier<List<UUID>> playersSupplier) {
+        this.title = title;
         this.lines = lines.size() > 15 ? lines.subList(0, 15) : lines;
-        this.playerSpecific = playerSpecific;
-        this.provider = provider;
+        this.generalModifier = generalModifier;
+        this.playerModifier = playerModifier;
         this.updateInterval = updateInterval;
+        this.players = players;
+        this.playersSupplier = playersSupplier;
     }
 
     /**
-     * Returns the name of the sidebar.
-     * @return The name of the sidebar.
+     * @return The title of the sidebar.
      */
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     /**
@@ -47,19 +55,24 @@ public class Sidebar {
     }
 
     /**
-     * Returns the provider that is used to get the placeholder values of the sidebar.
-     * @return The provider that is used to get the placeholder values of the sidebar.
+     * @return The general modifier that is used to update the lines of the sidebar.
      */
-    public SidebarContentProvider getProvider() {
-        return provider;
+    public GeneralSidebarContentModifier getGeneralModifier() {
+        return generalModifier;
     }
 
     /**
-     * Returns whether the content of the sidebar is different for each player.
-     * @return True if the content of the sidebar is different for each player, false otherwise.
+     * @return The player specific modifier that is used to update the lines of the sidebar.
      */
-    public boolean isPlayerSpecific() {
-        return playerSpecific;
+    public PlayerSidebarContentProvider getPlayerModifier() {
+        return playerModifier;
+    }
+
+    /**
+     * @return Whether the sidebar has a player specific modifier.
+     */
+    public boolean hasPlayerModifier() {
+        return playerModifier != null;
     }
 
     /**
@@ -67,5 +80,15 @@ public class Sidebar {
      */
     public Integer getUpdateInterval() {
         return updateInterval;
+    }
+
+    /**
+     * Returns the players that can see the sidebar. All other players won't be able to see it. If this is null, all players will be able to see the sidebar.
+     * This method calls the supplier if it exists, otherwise it returns the players variable.
+     *
+     * @return The players that can see the sidebar.
+     */
+    public List<UUID> getPlayers() {
+        return playersSupplier != null ? playersSupplier.get() : players;
     }
 }
