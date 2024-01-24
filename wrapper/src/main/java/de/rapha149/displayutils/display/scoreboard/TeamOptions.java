@@ -93,4 +93,20 @@ public class TeamOptions {
     public TeamVisibilityOption getDeathMessageVisibility() {
         return deathMessageVisibility;
     }
+
+    /**
+     * Creates a new {@link TeamOptionsBuilder} with the same options as this instance.
+     * @return The {@link TeamOptionsBuilder} instance.
+     */
+    public TeamOptionsBuilder toBuilder() {
+        return new TeamOptionsBuilder()
+                .setPrefix(prefix)
+                .setSuffix(suffix)
+                .setColor(color)
+                .setFriendlyFire(friendlyFire)
+                .setSeeFriendlyInvisibles(seeFriendlyInvisibles)
+                .setCollisionRule(collisionRule)
+                .setNameTagVisibility(nameTagVisibility)
+                .setDeathMessageVisibility(deathMessageVisibility);
+    }
 }
