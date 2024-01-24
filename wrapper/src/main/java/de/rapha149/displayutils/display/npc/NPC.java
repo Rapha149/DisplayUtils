@@ -160,30 +160,4 @@ public class NPC {
     public int getListenerCooldown() {
         return listenerCooldown;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        NPC npc = (NPC) o;
-        return sneaking == npc.sneaking &&
-               collidable == npc.collidable &&
-               nameTagVisible == npc.nameTagVisible &&
-               matchSneakingWithPlayer == npc.matchSneakingWithPlayer &&
-               lookAtPlayer == npc.lookAtPlayer &&
-               listenerCooldown == npc.listenerCooldown &&
-               Objects.equals(identifier, npc.identifier) &&
-               Objects.equals(name, npc.name) &&
-               Objects.equals(skin, npc.skin) &&
-               Objects.equals(loc, npc.loc) &&
-               Objects.equals(includedPlayers, npc.includedPlayers) &&
-               Objects.equals(useListener, npc.useListener);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(identifier, name, skin, loc, includedPlayers, sneaking, collidable, nameTagVisible, matchSneakingWithPlayer, lookAtPlayer, useListener, listenerCooldown);
-    }
 }
