@@ -21,9 +21,13 @@ public class SidebarBuilder {
     private Supplier<List<UUID>> playerSupplier = null;
 
     /**
-     * Constructs a new SidebarBuilder.
+     * Constructs a new SidebarBuilder. <p>
+     * If the title is longer than 32 characters, it will be cut off. <p>
+     * If there are more than 15 lines, the last lines will be ignored. <p>
+     * If a line is longer than 32 (up to 1.12) or 128 (since 1.13) characters, it will be cut off. If you are using color codes, it could also be cut off sooner.
+     *
      * @param title The title of the sidebar. Will be shown above the lines.
-     * @param lines The lines of the sidebar. May contain placeholder (%placeholder%). If there are more than 15 lines, the last lines will be ignored.
+     * @param lines The lines of the sidebar.
      * @throws java.lang.NullPointerException If the name or the lines are null.
      */
     public SidebarBuilder(String title, List<String> lines) {
@@ -50,7 +54,7 @@ public class SidebarBuilder {
     }
 
     /**
-     * Sets the modifier that is used to get the placeholder values of the sidebar.
+     * Sets the modifier that can be used to update the lines of the sidebar without re-adding it.
      * Use this method if the content of the sidebar is different for each player.
      * @param playerModifier The modifier.
      * @return The {@link SidebarBuilder} instance.

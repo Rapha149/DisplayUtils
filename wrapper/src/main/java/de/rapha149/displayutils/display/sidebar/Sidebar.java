@@ -23,7 +23,7 @@ public class Sidebar {
     /**
      * Use the {@link SidebarBuilder} to create a new Sidebar.
      * @param title The title of the sidebar.
-     * @param lines The lines of the sidebar. May contain placeholders (%placeholder%).
+     * @param lines The lines of the sidebar. If there are more than 15 lines, the last lines will be ignored.
      * @param generalModifier The general modifier that is used to update the lines of the sidebar.
      * @param playerModifier The player specific modifier that is used to update the lines of the sidebar.
      * @param updateInterval The interval in ticks in which the content of the sidebar is updated. If this is null, the content is not automatically updated.
@@ -48,7 +48,7 @@ public class Sidebar {
     }
 
     /**
-     * @return The lines of the sidebar. May contain placeholders (%placeholder%).
+     * @return The lines of the sidebar.
      */
     public List<String> getLines() {
         return lines;

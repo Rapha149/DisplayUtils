@@ -25,7 +25,7 @@ public class HologramBuilder {
     /**
      * Constructs a new HologramBuilder.
      * @param identifier The identifier of the hologram. Must be unique.
-     * @param lines The lines of the hologram. May contain placeholders (%placeholder%).
+     * @param lines The lines of the hologram.
      * @param loc The location of the hologram (the location of the first line).
      * @throws java.lang.NullPointerException If the identifier, lines or loc is null.
      */
