@@ -29,10 +29,13 @@ public class SidebarBuilder {
      * @param title The title of the sidebar. Will be shown above the lines.
      * @param lines The lines of the sidebar.
      * @throws java.lang.NullPointerException If the name or the lines are null.
+     * @throws java.lang.IllegalArgumentException If the lines are empty.
      */
     public SidebarBuilder(String title, List<String> lines) {
         Objects.requireNonNull(title, "The name cannot be null");
         Objects.requireNonNull(lines, "The lines cannot be null");
+        if (lines.isEmpty())
+            throw new IllegalArgumentException("The lines cannot be empty");
 
         this.title = title;
         this.lines = lines.stream().map(line -> line != null ? line : "").collect(Collectors.toList());

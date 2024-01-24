@@ -28,11 +28,14 @@ public class HologramBuilder {
      * @param lines The lines of the hologram.
      * @param loc The location of the hologram (the location of the first line).
      * @throws java.lang.NullPointerException If the identifier, lines or loc is null.
+     * @throws java.lang.IllegalArgumentException If the lines are empty.
      */
     public HologramBuilder(String identifier, List<String> lines, Location loc) {
         Objects.requireNonNull(identifier, "The identifier cannot be null");
         Objects.requireNonNull(lines, "The lines cannot be null");
         Objects.requireNonNull(loc, "The location cannot be null");
+        if (lines.isEmpty())
+            throw new IllegalArgumentException("The lines cannot be empty");
 
         this.identifier = identifier;
         this.lines = lines.stream().map(line -> line != null ? line : "").collect(Collectors.toList());
