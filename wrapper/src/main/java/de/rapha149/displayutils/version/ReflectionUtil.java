@@ -14,6 +14,8 @@ public class ReflectionUtil {
     /**
      * Retrieves the value of a field from an object.
      *
+     * @param <O> The type of the input class.
+     * @param <R> The type of the return value.
      * @param obj The object from which to retrieve the field.
      * @param field The name of the field to retrieve.
      * @return The value of the field.
@@ -26,6 +28,8 @@ public class ReflectionUtil {
     /**
      * Retrieves the value of a field from an object, casting it to a specified class.
      *
+     * @param <O> The type of the input class.
+     * @param <R> The type of the return value.
      * @param input The object from which to retrieve the field.
      * @param field The name of the field to retrieve.
      * @param returnClass The class to which to cast the field's value.
@@ -39,6 +43,8 @@ public class ReflectionUtil {
     /**
      * Retrieves the value of a field from an object of a specified class.
      *
+     * @param <O> The type of the input class.
+     * @param <R> The type of the return value.
      * @param obj The object from which to retrieve the field.
      * @param objClass The class of the object.
      * @param field The name of the field to retrieve.
@@ -52,6 +58,8 @@ public class ReflectionUtil {
     /**
      * Retrieves the value of a field from an object of a specified class, casting it to another specified class.
      *
+     * @param <O> The type of the input class.
+     * @param <R> The type of the return value.
      * @param obj The object from which to retrieve the field.
      * @param objClass The class of the object.
      * @param field The name of the field to retrieve.
@@ -72,6 +80,7 @@ public class ReflectionUtil {
     /**
      * Sets the value of a field in an object.
      *
+     * @param <O> The type of the input class.
      * @param obj The object in which to set the field.
      * @param field The name of the field to set.
      * @param value The value to set the field to.
@@ -84,6 +93,7 @@ public class ReflectionUtil {
     /**
      * Sets the value of a field in an object of a specified class.
      *
+     * @param <O> The type of the input class.
      * @param obj The object in which to set the field.
      * @param objClass The class of the object.
      * @param field The name of the field to set.
@@ -103,6 +113,8 @@ public class ReflectionUtil {
     /**
      * Invokes a method on an object.
      *
+     * @param <O> The type of the input class.
+     * @param <R> The type of the return value.
      * @param obj The object on which to invoke the method.
      * @param method The name of the method to invoke.
      * @param args The arguments to pass to the method.
@@ -116,6 +128,8 @@ public class ReflectionUtil {
     /**
      * Invokes a method on an object, casting the result to a specified class.
      *
+     * @param <O> The type of the input class.
+     * @param <R> The type of the return value.
      * @param obj The object on which to invoke the method.
      * @param method The name of the method to invoke.
      * @param returnClass The class to which to cast the result of the method invocation.
@@ -130,6 +144,8 @@ public class ReflectionUtil {
     /**
      * Invokes a method on an object of a specified class, casting the result to another specified class.
      *
+     * @param <O> The type of the input class.
+     * @param <R> The type of the return value.
      * @param obj The object on which to invoke the method.
      * @param objClass The class of the object.
      * @param method The name of the method to invoke.
@@ -145,6 +161,8 @@ public class ReflectionUtil {
     /**
      * Invokes a method on an object of a specified class, casting the result to another specified class.
      *
+     * @param <O> The type of the input class.
+     * @param <R> The type of the return value.
      * @param obj The object on which to invoke the method.
      * @param objClass The class of the object.
      * @param method The name of the method to invoke.
@@ -167,6 +185,7 @@ public class ReflectionUtil {
     /**
      * Invokes a constructor of a specified class.
      *
+     * @param <T> The type of the input class.
      * @param clazz The class whose constructor to invoke.
      * @param args The arguments to pass to the constructor.
      * @return The result of the constructor invocation.
@@ -179,6 +198,7 @@ public class ReflectionUtil {
     /**
      * Invokes a constructor of a specified class.
      *
+     * @param <T> The type of the input class.
      * @param clazz The class whose constructor to invoke.
      * @param argTypes The types of the arguments to pass to the constructor.
      * @param args The arguments to pass to the constructor.
