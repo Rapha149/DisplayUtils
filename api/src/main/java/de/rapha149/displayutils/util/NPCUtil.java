@@ -57,7 +57,7 @@ public class NPCUtil {
      * The NPC will automatically be shown to all currently online players and players that join in the future (as long as the npc is configured to be shown to them).
      * The NPC is not persistent. After a reload/restart it will have to be added again.
      *
-     * @param npc The NPC to add.
+     * @param npc The NPC to add. Create with {@link de.rapha149.displayutils.display.npc.NPCBuilder}.
      */
     public static void addNPC(NPC npc) {
         checkUsable();
@@ -83,7 +83,7 @@ public class NPCUtil {
     /**
      * Removes an NPC from the server.
      * @param identifier The identifier of the NPC to remove.
-     * @return Whether there was an NPC with that identifier.
+     * @return True if an NPC with that identifier existed and was removed, false otherwise.
      */
     public static boolean removeNPC(String identifier) {
         checkUsable();
@@ -108,7 +108,7 @@ public class NPCUtil {
     /**
      * Checks whether an NPC with the given identifier exists.
      * @param identifier The identifier to check.
-     * @return Whether an NPC with that identifier exists.
+     * @return True if an NPC with that identifier exists, false otherwise.
      */
     public static boolean isNPC(String identifier) {
         return npcs.containsKey(identifier);
@@ -238,7 +238,7 @@ public class NPCUtil {
             UUID uuid = player.getUniqueId();
             if (!joinFinishedPlayers.contains(uuid))
                 return false;
-            if (npc.isShownForPlayer(uuid))
+            if (!npc.isShownForPlayer(uuid))
                 return false;
 
             if (currentPlayers.contains(uuid)) {
