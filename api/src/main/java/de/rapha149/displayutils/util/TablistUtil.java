@@ -63,8 +63,35 @@ public class TablistUtil {
         if (provider == null || Bukkit.getOnlinePlayers().isEmpty())
             return;
 
-        Collection<? extends Player> players = Bukkit.getOnlinePlayers();
-        List<TablistGroup> groups = provider.getTablistContent(players);
+        List<TablistGroup> content = provider.getTablistContent(Bukkit.getOnlinePlayers());
+        {
+            List<String> identifiers = content.stream().map(TablistGroup::getIdentifier).collect(Collectors.toList());
+            if (identifiers.size() > new HashSet<>(identifiers).size())
+                throw new IllegalArgumentException("The identifiers of the tablist groups must be unique");
+        }
+
+        List<TablistGroup> groups = new ArrayList<>();
+        for (TablistGroup group : content) {
+            if (group.isCustomPlayerOrder()) {
+                List<String> players = group.getPlayers();
+                for (int i = 0; i < players.size(); i++) {
+                    groups.add(new TablistGroup(
+                            group.getIdentifier() + "-pos" + i,
+                            group.getTeamOptions(),
+                            Collections.singletonList(players.get(i)),
+                            false
+                    ));
+                }
+            } else {
+                groups.add(new TablistGroup(
+                        group.getIdentifier() + "-pos0",
+                        group.getTeamOptions(),
+                        group.getPlayers(),
+                        false
+                ));
+            }
+        }
+
         Map<TablistGroup, String> groupMap = new HashMap<>();
         List<Object> packets = new ArrayList<>();
         List<Object> packetsJoined = joined != null ? new ArrayList<>() : null;
@@ -128,7 +155,7 @@ public class TablistUtil {
             }
         });
 
-        for (Player player : players)
+        for (Player player : Bukkit.getOnlinePlayers())
             wrapper.sendPackets(player, player.equals(joined) ? packetsJoined : packets);
     }
 
