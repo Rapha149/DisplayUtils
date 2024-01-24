@@ -18,7 +18,7 @@ public class SidebarBuilder {
     private PlayerSidebarContentProvider playerModifier = null;
     private Integer updateInterval = null;
     private List<UUID> players = null;
-    private Supplier<List<UUID>> playersSupplier = null;
+    private Supplier<List<UUID>> playerSupplier = null;
 
     /**
      * Constructs a new SidebarBuilder.
@@ -109,17 +109,17 @@ public class SidebarBuilder {
      * The supplier will be called every time the sidebar is updated.
      * This overrides the players that are set with {@link #setPlayers(List)}.
      *
-     * @param playersSupplier The supplier that is used to get the players that can see the sidebar.
+     * @param playerSupplier The supplier that is used to get the players that can see the sidebar.
      * @return The {@link SidebarBuilder} instance.
-     * @throws java.lang.NullPointerException If the players supplier is null.
+     * @throws java.lang.NullPointerException If the player supplier is null.
      * @see #setPlayers(List)
      * @see #setPlayerUUIDs(List)
      * @see #setPlayerUUIDSupplier(Supplier)
      */
-    public SidebarBuilder setPlayerSupplier(Supplier<List<Player>> playersSupplier) {
-        Objects.requireNonNull(playersSupplier, "The players supplier cannot be null");
+    public SidebarBuilder setPlayerSupplier(Supplier<List<Player>> playerSupplier) {
+        Objects.requireNonNull(playerSupplier, "The player supplier cannot be null");
 
-        this.playersSupplier = () -> playersSupplier.get().stream().map(Player::getUniqueId).collect(Collectors.toList());
+        this.playerSupplier = () -> playerSupplier.get().stream().map(Player::getUniqueId).collect(Collectors.toList());
         return this;
     }
 
@@ -130,15 +130,15 @@ public class SidebarBuilder {
      *
      * @param uuidsSupplier The supplier that is used to get the uuids of the players that can see the sidebar.
      * @return The {@link SidebarBuilder} instance.
-     * @throws java.lang.NullPointerException If the players supplier is null.
+     * @throws java.lang.NullPointerException If the player supplier is null.
      * @see #setPlayers(List)
      * @see #setPlayerUUIDs(List)
      * @see #setPlayerSupplier(Supplier)
      */
     public SidebarBuilder setPlayerUUIDSupplier(Supplier<List<UUID>> uuidsSupplier) {
-        Objects.requireNonNull(uuidsSupplier, "The players supplier cannot be null");
+        Objects.requireNonNull(uuidsSupplier, "The player supplier cannot be null");
 
-        this.playersSupplier = uuidsSupplier;
+        this.playerSupplier = uuidsSupplier;
         return this;
     }
 
@@ -147,6 +147,6 @@ public class SidebarBuilder {
      * @return The {@link Sidebar} instance.
      */
     public Sidebar build() {
-        return new Sidebar(title, lines, generalModifier, playerModifier, updateInterval, players, playersSupplier);
+        return new Sidebar(title, lines, generalModifier, playerModifier, updateInterval, players, playerSupplier);
     }
 }

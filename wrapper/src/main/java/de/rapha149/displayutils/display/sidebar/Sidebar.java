@@ -18,7 +18,7 @@ public class Sidebar {
     private final PlayerSidebarContentProvider playerModifier;
     private final Integer updateInterval;
     private final List<UUID> players;
-    private final Supplier<List<UUID>> playersSupplier;
+    private final Supplier<List<UUID>> playerSupplier;
 
     /**
      * Use the {@link SidebarBuilder} to create a new Sidebar.
@@ -28,16 +28,16 @@ public class Sidebar {
      * @param playerModifier The player specific modifier that is used to update the lines of the sidebar.
      * @param updateInterval The interval in ticks in which the content of the sidebar is updated. If this is null, the content is not automatically updated.
      * @param players The players that can see the sidebar. All other players won't be able to see it. If this is null, all players will be able to see the sidebar.
-     * @param playersSupplier The supplier that is used to get the players that can see the sidebar. All other players won't be able to see it. If this is null, the parameter players is used.
+     * @param playerSupplier The supplier that is used to get the players that can see the sidebar. All other players won't be able to see it. If this is null, the parameter players is used.
      */
-    Sidebar(String title, List<String> lines, GeneralSidebarContentModifier generalModifier, PlayerSidebarContentProvider playerModifier, Integer updateInterval, List<UUID> players, Supplier<List<UUID>> playersSupplier) {
+    Sidebar(String title, List<String> lines, GeneralSidebarContentModifier generalModifier, PlayerSidebarContentProvider playerModifier, Integer updateInterval, List<UUID> players, Supplier<List<UUID>> playerSupplier) {
         this.title = title;
         this.lines = lines.size() > 15 ? lines.subList(0, 15) : lines;
         this.generalModifier = generalModifier;
         this.playerModifier = playerModifier;
         this.updateInterval = updateInterval;
         this.players = players;
-        this.playersSupplier = playersSupplier;
+        this.playerSupplier = playerSupplier;
     }
 
     /**
@@ -89,6 +89,6 @@ public class Sidebar {
      * @return The players that can see the sidebar.
      */
     public List<UUID> getPlayers() {
-        return playersSupplier != null ? playersSupplier.get() : players;
+        return playerSupplier != null ? playerSupplier.get() : players;
     }
 }

@@ -20,7 +20,7 @@ public class Hologram {
     private final PlayerHologramContentModifier playerModifier;
     private final Integer updateInterval;
     private final List<UUID> players;
-    private final Supplier<List<UUID>> playersSupplier;
+    private final Supplier<List<UUID>> playerSupplier;
 
     /**
      * Use the {@link HologramBuilder} to create a new Hologram.
@@ -31,9 +31,9 @@ public class Hologram {
      * @param playerModifier The player specific modifier that is used to update the lines of the hologram.
      * @param updateInterval The interval in ticks in which the content of the hologram is updated. If this is null, the content is not automatically updated.
      * @param players The players that can see the hologram. All other players won't be able to see it. If this is null, all players will be able to see the hologram.
-     * @param playersSupplier The supplier that is used to get the players that can see the hologram. All other players won't be able to see it. If this is null, the parameter players is used.
+     * @param playerSupplier The supplier that is used to get the players that can see the hologram. All other players won't be able to see it. If this is null, the parameter players is used.
      */
-    Hologram(String identifier, List<String> lines, Location loc, GeneralHologramContentModifier generalModifier, PlayerHologramContentModifier playerModifier, Integer updateInterval, List<UUID> players, Supplier<List<UUID>> playersSupplier) {
+    Hologram(String identifier, List<String> lines, Location loc, GeneralHologramContentModifier generalModifier, PlayerHologramContentModifier playerModifier, Integer updateInterval, List<UUID> players, Supplier<List<UUID>> playerSupplier) {
         this.identifier = identifier;
         this.lines = lines;
         this.loc = loc;
@@ -41,7 +41,7 @@ public class Hologram {
         this.playerModifier = playerModifier;
         this.updateInterval = updateInterval;
         this.players = players;
-        this.playersSupplier = playersSupplier;
+        this.playerSupplier = playerSupplier;
     }
 
     /**
@@ -100,6 +100,6 @@ public class Hologram {
      * @return The players that can see the hologram.
      */
     public List<UUID> getPlayers() {
-        return playersSupplier != null ? playersSupplier.get() : players;
+        return playerSupplier != null ? playerSupplier.get() : players;
     }
 }
