@@ -95,6 +95,16 @@ public class Wrapper1_12_R1 implements VersionWrapper {
     }
 
     @Override
+    public int getMaxTeamPrefixSuffixLength() {
+        return 16;
+    }
+
+    @Override
+    public int getMaxObjetiveDisplayNameLength() {
+        return 32;
+    }
+
+    @Override
     public Object newScoreboard() {
         return new Scoreboard();
     }
