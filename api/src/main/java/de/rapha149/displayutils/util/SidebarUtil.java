@@ -5,6 +5,7 @@ import de.rapha149.displayutils.display.sidebar.Sidebar;
 import de.rapha149.displayutils.version.ScoreboardAction;
 import de.rapha149.displayutils.version.ScoreboardPosition;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,12 +14,15 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static de.rapha149.displayutils.util.DisplayUtils.*;
 
 public class SidebarUtil {
 
+    private static final Pattern STARTSWITH_COLOR_CHAR = Pattern.compile("^[0-9a-fk-or]", Pattern.CASE_INSENSITIVE);
+    private static final Pattern STARTSWITH_NEW_COLOR = Pattern.compile("^§[0-9a-fr]", Pattern.CASE_INSENSITIVE); // does not check for bold, italic, etc. because they don't reset the formatting
     private static final List<String> SCORE_NAMES = Arrays.asList("§0", "§1", "§2", "§3", "§4", "§5", "§6", "§7", "§8", "§9", "§a", "§b", "§c", "§d", "§e");
     private static List<Object> teams;
 
@@ -178,11 +182,32 @@ public class SidebarUtil {
                 teams.add(wrapper.newTeam(scoreboard, "sidebar_" + i));
         }
 
+        int length = line.length(), maxLength = wrapper.getMaxTeamPrefixSuffixLength();
+        String prefix = line.substring(0, Math.min(length, maxLength));
+        String suffix;
+        if (length > maxLength) {
+            suffix = line.substring(maxLength);
+            if (prefix.endsWith("§") && STARTSWITH_COLOR_CHAR.matcher(suffix).find()) {
+                prefix = prefix.substring(0, prefix.length() - 1);
+                suffix = "§" + suffix;
+            }
+            if (!STARTSWITH_NEW_COLOR.matcher(suffix).find()) {
+                String lastColors = ChatColor.getLastColors(prefix);
+                suffix = (lastColors.isEmpty() ? "§r" : "") + suffix;
+            }
+            if (suffix.length() > maxLength) {
+                String newSuffix = suffix.substring(0, maxLength);
+                if (newSuffix.endsWith("§") && STARTSWITH_COLOR_CHAR.matcher(suffix.substring(maxLength)).find())
+                    newSuffix = newSuffix.substring(0, newSuffix.length() - 1);
+                suffix = newSuffix;
+            }
+        } else
+            suffix = "";
+
         Object team = teams.get(index);
-        int length = line.length();
         wrapper.setTeamOptions(team, new TeamOptionsBuilder()
-                .setPrefix(line.substring(0, Math.min(length, 16)))
-                .setSuffix(length > 16 ? line.substring(16, Math.min(length, 32)) : "")
+                .setPrefix(prefix)
+                .setSuffix(suffix)
                 .build());
         return team;
     }
