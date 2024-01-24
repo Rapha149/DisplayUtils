@@ -161,11 +161,9 @@ public class Wrapper1_12_R1 implements VersionWrapper {
     @Override
     public void setTeamOptions(Object team, TeamOptions options) {
         ScoreboardTeam t = (ScoreboardTeam) team;
-        String prefix = options.getPrefix();
-        ChatColor color = options.getColor();
-        t.setPrefix(prefix + (prefix.length() <= 14 ? color : ""));
+        t.setPrefix(options.getPrefix());
         t.setSuffix(options.getSuffix());
-        t.setColor(EnumChatFormat.valueOf(color.name()));
+        t.setColor(EnumChatFormat.valueOf(options.getColor().name()));
         t.setAllowFriendlyFire(options.isFriendlyFire());
         t.setCanSeeFriendlyInvisibles(options.isSeeFriendlyInvisibles());
 
