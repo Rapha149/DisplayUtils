@@ -1,7 +1,6 @@
 package de.rapha149.displayutils.util;
 
 import de.rapha149.displayutils.display.hologram.Hologram;
-import de.rapha149.displayutils.display.hologram.HologramPlaceholders;
 import de.rapha149.displayutils.util.HologramUtil.HologramData.GeneralHologramData;
 import de.rapha149.displayutils.util.HologramUtil.HologramData.PlayerHologramData;
 import org.bukkit.Bukkit;
@@ -17,7 +16,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static de.rapha149.displayutils.util.DisplayUtils.*;
@@ -39,7 +37,7 @@ public class HologramUtil {
      * The hologram will automatically be shown to all currently online players and players that join in the future (as long as the npc is configured to be shown to them).
      * The hologram is not persistent. After a reload/restart it will have to be added again.
      *
-     * @param hologram The hologram to add.
+     * @param hologram The hologram to add. Create with {@link de.rapha149.displayutils.display.hologram.HologramBuilder}.
      */
     public static void addHologram(Hologram hologram) {
         checkUsable();
@@ -52,7 +50,6 @@ public class HologramUtil {
         Location currentLoc = hologram.getLoc().clone().subtract(0, 0.5, 0);
         for (int i = 0; i < hologram.getLines().size(); i++) {
             ArmorStand armorStand = wrapper.createArmorStand(currentLoc);
-            armorStand.setCustomNameVisible(true);
             armorStand.setVisible(false);
             armorStand.setMarker(true);
             armorStand.setBasePlate(false);
@@ -65,7 +62,7 @@ public class HologramUtil {
         BukkitTask task = updateInterval == null ? null : Bukkit.getScheduler().runTaskTimer(plugin,
                 () -> updateHologram(identifier), updateInterval, updateInterval);
 
-        holograms.put(identifier, hologram.isPlayerSpecific() ? new PlayerHologramData(hologram, armorStands, task) :
+        holograms.put(identifier, hologram.hasPlayerModifier() ? new PlayerHologramData(hologram, armorStands, task) :
                 new GeneralHologramData(hologram, armorStands, task));
         updateHologram(identifier);
     }
@@ -73,19 +70,37 @@ public class HologramUtil {
     /**
      * Removes a hologram from the server.
      * @param identifier The identifier of the hologram to remove.
+     * @return True if a hologram with the given identifier existed and was removed, false otherwise.
      */
-    public static void removeHologram(String identifier) {
+    public static boolean removeHologram(String identifier) {
         checkUsable();
 
         HologramData data = holograms.remove(identifier);
         if (data == null)
-            return;
+            return false;
 
         if (data.task != null)
             data.task.cancel();
 
         List<Object> packets = Collections.singletonList(getDestroyPacket(data));
         Bukkit.getOnlinePlayers().forEach(player -> wrapper.sendPackets(player, packets));
+        return true;
+    }
+
+    /**
+     * Checks whether an hologram with the given identifier exists.
+     * @param identifier The identifier to check.
+     * @return True if an hologram with the given identifier exists, false otherwise.
+     */
+    public static boolean isHologram(String identifier) {
+        return holograms.containsKey(identifier);
+    }
+
+    /**
+     * @return A set containing the identifiers of all holograms.
+     */
+    public static Set<String> getHologramIdentifiers() {
+        return Collections.unmodifiableSet(holograms.keySet());
     }
 
     /**
@@ -148,7 +163,7 @@ public class HologramUtil {
                 ArmorStand armorStand = data.armorStands.get(i);
                 initPackets.add(wrapper.getSpawnLivingEntityPacket(armorStand));
                 if (!playerSpecific) {
-                    armorStand.setCustomName(generalLines.get(i));
+                    setCustomName(armorStand, lines.get(i));
                     initPackets.add(wrapper.getEntityMetadataPacket(armorStand));
                 }
             }
@@ -171,7 +186,7 @@ public class HologramUtil {
                     String line = playerLines.get(i);
                     if (previousLines == null || !previousLines.get(i).equals(line)) {
                         ArmorStand armorStand = data.armorStands.get(i);
-                        armorStand.setCustomName(line);
+                        setCustomName(armorStand, line);
                         packets.computeIfAbsent(player, p -> new ArrayList<>()).add(wrapper.getEntityMetadataPacket(armorStand));
                     }
                 }
@@ -185,7 +200,7 @@ public class HologramUtil {
                 String line = lines.get(i);
                 if (previousLines == null || !previousLines.get(i).equals(line)) {
                     ArmorStand armorStand = data.armorStands.get(i);
-                    armorStand.setCustomName(line);
+                    setCustomName(armorStand, line);
                     generalPackets.add(wrapper.getEntityMetadataPacket(armorStand));
                 }
             }
@@ -232,7 +247,7 @@ public class HologramUtil {
         List<Object> packets = new ArrayList<>();
         for (int i = 0; i < data.armorStands.size(); i++) {
             ArmorStand armorStand = data.armorStands.get(i);
-            armorStand.setCustomName(lines.get(i));
+            setCustomName(armorStand, lines.get(i));
             packets.add(wrapper.getSpawnLivingEntityPacket(armorStand));
         }
 
@@ -242,7 +257,7 @@ public class HologramUtil {
     }
 
     /**
-     * Checks if a player is in the same world as a hologram.
+     * Internal method. Checks if a player is in the same world as a hologram.
      * @param player The player to check.
      * @param hologram The hologram to check.
      * @return Whether the player is in the same world as the hologram.
@@ -252,7 +267,22 @@ public class HologramUtil {
     }
 
     /**
-     * Creates a destroy entities packet for a hologram.
+     * Internal method. Sets the name of an armor stand. If the name is blank or null, the custom name visible flag will be set to false.
+     * @param armorStand The armor stand to set the name for.
+     * @param name The name to set.
+     */
+    private static void setCustomName(ArmorStand armorStand, String name) {
+        if (name == null || name.trim().isEmpty()) {
+            armorStand.setCustomNameVisible(false);
+            armorStand.setCustomName("");
+        } else {
+            armorStand.setCustomNameVisible(true);
+            armorStand.setCustomName(name);
+        }
+    }
+
+    /**
+     * Internal method. Creates a destroy entities packet for a hologram.
      * @param data The data of the hologram to create the packet for.
      * @return The created packet.
      */
