@@ -5,6 +5,7 @@ import de.rapha149.displayutils.display.hologram.content.PlayerHologramContentMo
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -38,7 +39,7 @@ public class HologramBuilder {
             throw new IllegalArgumentException("The lines cannot be empty");
 
         this.identifier = identifier;
-        this.lines = lines.stream().map(line -> line != null ? line : "").collect(Collectors.toList());
+        this.lines = Collections.unmodifiableList(lines.stream().map(line -> line != null ? line : "").collect(Collectors.toList()));
         this.loc = loc;
     }
 

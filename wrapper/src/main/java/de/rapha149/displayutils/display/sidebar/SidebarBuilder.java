@@ -4,6 +4,7 @@ import de.rapha149.displayutils.display.sidebar.content.GeneralSidebarContentMod
 import de.rapha149.displayutils.display.sidebar.content.PlayerSidebarContentProvider;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -38,7 +39,7 @@ public class SidebarBuilder {
             throw new IllegalArgumentException("The lines cannot be empty");
 
         this.title = title;
-        this.lines = lines.stream().map(line -> line != null ? line : "").collect(Collectors.toList());
+        this.lines = Collections.unmodifiableList(lines.stream().map(line -> line != null ? line : "").collect(Collectors.toList()));
     }
 
     /**

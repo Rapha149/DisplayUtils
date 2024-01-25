@@ -16,7 +16,7 @@ public interface PlayerSidebarContentProvider {
      * The returned lines must the be same size as the input lines. You may not return null.
      *
      * @param player The player to whom the returned lines are shown.
-     * @param lines The current lines of the sidebar.
+     * @param lines The current lines of the sidebar. Please note that this list is immutable.
      * @return The modified lines of the sidebar.
      */
     List<String> modify(Player player, List<String> lines);

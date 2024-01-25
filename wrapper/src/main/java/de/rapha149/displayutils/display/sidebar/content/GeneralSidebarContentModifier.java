@@ -13,7 +13,7 @@ public interface GeneralSidebarContentModifier {
      * This method is called when the content of the sidebar is updated.
      * The returned lines must the be same size as the input lines. You may not return null.
      *
-     * @param lines The current lines of the sidebar.
+     * @param lines The current lines of the sidebar. Please note that this list is immutable.
      * @return The modified lines of the sidebar.
      */
     List<String> modify(List<String> lines);

@@ -154,7 +154,7 @@ public class HologramUtil {
 
         Map<Player, List<Object>> packets = new HashMap<>();
         boolean playerSpecific = hologram.hasPlayerModifier();
-        List<String> lines = hologram.getGeneralModifier() != null ? hologram.getGeneralModifier().modify(hologram.getLines()) : hologram.getLines();
+        List<String> lines = hologram.getGeneralModifier() != null ? Collections.unmodifiableList(hologram.getGeneralModifier().modify(hologram.getLines())) : hologram.getLines();
 
         List<Player> uninitialized = players.stream().filter(player -> !data.initializedPlayers.contains(player.getUniqueId())).collect(Collectors.toList());
         if (!uninitialized.isEmpty()) {

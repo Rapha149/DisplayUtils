@@ -15,7 +15,7 @@ public interface GeneralHologramContentModifier {
      * The returned lines must the be same size as the input lines. You may not return null.
      * In order to not show a specific line, set that line to null. The armor stand of that line won't be shown either.
      *
-     * @param lines The current lines of the hologram.
+     * @param lines The current lines of the hologram. Please note that this list is immutable.
      * @return The modified lines of the hologram.
      */
     List<String> modify(List<String> lines);

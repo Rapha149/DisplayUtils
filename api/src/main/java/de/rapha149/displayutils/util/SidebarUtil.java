@@ -110,7 +110,7 @@ public class SidebarUtil {
         Map<Player, List<Object>> packets = new HashMap<>();
         Object scoreboard = wrapper.newScoreboard();
 
-        List<String> lines = sidebar.getGeneralModifier() != null ? sidebar.getGeneralModifier().modify(sidebar.getLines()) : sidebar.getLines();
+        List<String> lines = sidebar.getGeneralModifier() != null ? Collections.unmodifiableList(sidebar.getGeneralModifier().modify(sidebar.getLines())) : sidebar.getLines();
         List<Player> uninitialized = players.stream().filter(player -> !initializedPlayers.contains(player.getUniqueId())).collect(Collectors.toList());
         if (!uninitialized.isEmpty()) {
             String title = sidebar.getTitle();
