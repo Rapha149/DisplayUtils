@@ -1,5 +1,7 @@
 package de.rapha149.displayutils.util;
 
+import de.rapha149.displayutils.display.scoreboard.TeamOptions;
+import de.rapha149.displayutils.display.scoreboard.TeamOptionsBuilder;
 import de.rapha149.displayutils.display.tablist.TablistContentProvider;
 import de.rapha149.displayutils.display.tablist.TablistGroup;
 import de.rapha149.displayutils.version.ScoreboardAction;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 import static de.rapha149.displayutils.util.DisplayUtils.*;
 
 public class TablistUtil {
+
+    private static final TeamOptions DEFAULT_TEAM_OPTIONS = new TeamOptionsBuilder().build();
 
     private static TablistContentProvider provider;
     private static Map<String, Entry<TablistGroup, Object>> teams = new HashMap<>();
@@ -71,6 +75,7 @@ public class TablistUtil {
         }
 
         List<TablistGroup> groups = new ArrayList<>();
+        List<String> existingPlayers = new ArrayList<>();
         for (TablistGroup group : content) {
             if (group.isCustomPlayerOrder()) {
                 List<String> players = group.getPlayers();
@@ -90,6 +95,19 @@ public class TablistUtil {
                         false
                 ));
             }
+
+            existingPlayers.addAll(group.getPlayers());
+        }
+
+        List<String> remainingPlayers = Bukkit.getOnlinePlayers().stream().map(Player::getName)
+                .filter(player -> !existingPlayers.contains(player)).collect(Collectors.toList());
+        if (!remainingPlayers.isEmpty()) {
+            groups.add(new TablistGroup(
+                    "remaining", // this can not be a duplicate identifiers because other identifiers are suffixed with "-pos"
+                    DEFAULT_TEAM_OPTIONS,
+                    remainingPlayers,
+                    false
+            ));
         }
 
         Map<TablistGroup, String> groupMap = new HashMap<>();
@@ -151,7 +169,8 @@ public class TablistUtil {
 
             if (joined != null) {
                 packetsJoined.add(wrapper.getTeamActionPacket(team, ScoreboardAction.CREATE));
-                packetsJoined.add(wrapper.getTeamPlayerActionPacket(team, group.getPlayers(), true));
+                if (!group.getPlayers().isEmpty())
+                    packetsJoined.add(wrapper.getTeamPlayerActionPacket(team, group.getPlayers(), true));
             }
         });
 

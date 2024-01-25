@@ -147,10 +147,10 @@ public class Wrapper1_12_R1 implements VersionWrapper {
                 builder.setCollisionRule(TeamOptionStatus.NEVER);
                 break;
             case HIDE_FOR_OTHER_TEAMS:
-                builder.setCollisionRule(TeamOptionStatus.FOR_OTHER_TEAMS);
+                builder.setCollisionRule(TeamOptionStatus.OFF_FOR_OTHER_TEAMS);
                 break;
             case HIDE_FOR_OWN_TEAM:
-                builder.setCollisionRule(TeamOptionStatus.FOR_OWN_TEAM);
+                builder.setCollisionRule(TeamOptionStatus.OFF_FOR_OWN_TEAM);
                 break;
         }
 
@@ -173,10 +173,10 @@ public class Wrapper1_12_R1 implements VersionWrapper {
             case NEVER:
                 t.setCollisionRule(EnumTeamPush.NEVER);
                 break;
-            case FOR_OTHER_TEAMS:
+            case OFF_FOR_OTHER_TEAMS:
                 t.setCollisionRule(EnumTeamPush.HIDE_FOR_OTHER_TEAMS);
                 break;
-            case FOR_OWN_TEAM:
+            case OFF_FOR_OWN_TEAM:
                 t.setCollisionRule(EnumTeamPush.HIDE_FOR_OWN_TEAM);
                 break;
         }
@@ -192,9 +192,9 @@ public class Wrapper1_12_R1 implements VersionWrapper {
             case NEVER:
                 return TeamOptionStatus.NEVER;
             case HIDE_FOR_OTHER_TEAMS:
-                return TeamOptionStatus.FOR_OTHER_TEAMS;
+                return TeamOptionStatus.OFF_FOR_OTHER_TEAMS;
             case HIDE_FOR_OWN_TEAM:
-                return TeamOptionStatus.FOR_OWN_TEAM;
+                return TeamOptionStatus.OFF_FOR_OWN_TEAM;
             default:
                 throw new IllegalStateException("Unexpected value: " + visibility);
         }
@@ -206,9 +206,9 @@ public class Wrapper1_12_R1 implements VersionWrapper {
                 return EnumNameTagVisibility.ALWAYS;
             case NEVER:
                 return EnumNameTagVisibility.NEVER;
-            case FOR_OTHER_TEAMS:
+            case OFF_FOR_OTHER_TEAMS:
                 return EnumNameTagVisibility.HIDE_FOR_OTHER_TEAMS;
-            case FOR_OWN_TEAM:
+            case OFF_FOR_OWN_TEAM:
                 return EnumNameTagVisibility.HIDE_FOR_OWN_TEAM;
             default:
                 throw new IllegalStateException("Unexpected value: " + status);
