@@ -1,9 +1,8 @@
 package de.rapha149.displayutils.util;
 
 import de.rapha149.displayutils.display.npc.NPC;
-import de.rapha149.displayutils.display.scoreboard.TeamCollisionRule;
 import de.rapha149.displayutils.display.scoreboard.TeamOptionsBuilder;
-import de.rapha149.displayutils.display.scoreboard.TeamVisibilityOption;
+import de.rapha149.displayutils.display.scoreboard.TeamOptionStatus;
 import de.rapha149.displayutils.version.ScoreboardAction;
 import de.rapha149.displayutils.version.UseEntityAction;
 import org.bukkit.Bukkit;
@@ -43,9 +42,9 @@ public class NPCUtil {
         teams.forEach(team -> {
             TeamOptionsBuilder builder = new TeamOptionsBuilder();
             if (!team.collidable)
-                builder.setCollisionRule(TeamCollisionRule.NEVER);
+                builder.setCollisionRule(TeamOptionStatus.NEVER);
             if (!team.nameTagVisible)
-                builder.setNameTagVisibility(TeamVisibilityOption.NEVER);
+                builder.setNameTagVisibility(TeamOptionStatus.NEVER);
             wrapper.setTeamOptions(team.team, builder.build());
         });
 

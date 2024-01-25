@@ -12,9 +12,9 @@ public class TeamOptionsBuilder {
     private ChatColor color = ChatColor.RESET;
     private boolean friendlyFire = true;
     private boolean seeFriendlyInvisibles = true;
-    private TeamCollisionRule collisionRule = TeamCollisionRule.ALWAYS;
-    private TeamVisibilityOption nameTagVisibility = TeamVisibilityOption.ALWAYS;
-    private TeamVisibilityOption deathMessageVisibility = TeamVisibilityOption.ALWAYS;
+    private TeamOptionStatus collisionRule = TeamOptionStatus.ALWAYS;
+    private TeamOptionStatus nameTagVisibility = TeamOptionStatus.ALWAYS;
+    private TeamOptionStatus deathMessageVisibility = TeamOptionStatus.ALWAYS;
 
     /**
      * Sets the prefix of the team.
@@ -81,7 +81,7 @@ public class TeamOptionsBuilder {
      * @param collisionRule The collision rule of the team.
      * @return The {@link TeamOptionsBuilder} instance.
      */
-    public TeamOptionsBuilder setCollisionRule(TeamCollisionRule collisionRule) {
+    public TeamOptionsBuilder setCollisionRule(TeamOptionStatus collisionRule) {
         this.collisionRule = collisionRule;
         return this;
     }
@@ -92,7 +92,7 @@ public class TeamOptionsBuilder {
      * @param nameTagVisibility The name tag visibility option of the team.
      * @return The {@link TeamOptionsBuilder} instance.
      */
-    public TeamOptionsBuilder setNameTagVisibility(TeamVisibilityOption nameTagVisibility) {
+    public TeamOptionsBuilder setNameTagVisibility(TeamOptionStatus nameTagVisibility) {
         this.nameTagVisibility = nameTagVisibility;
         return this;
     }
@@ -103,7 +103,7 @@ public class TeamOptionsBuilder {
      * @param deathMessageVisibility The death message visibility option of the team.
      * @return The {@link TeamOptionsBuilder} instance.
      */
-    public TeamOptionsBuilder setDeathMessageVisibility(TeamVisibilityOption deathMessageVisibility) {
+    public TeamOptionsBuilder setDeathMessageVisibility(TeamOptionStatus deathMessageVisibility) {
         this.deathMessageVisibility = deathMessageVisibility;
         return this;
     }

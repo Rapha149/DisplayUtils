@@ -12,9 +12,9 @@ public class TeamOptions {
     private ChatColor color = ChatColor.RESET;
     private boolean friendlyFire = true;
     private boolean seeFriendlyInvisibles = true;
-    private TeamCollisionRule collisionRule = TeamCollisionRule.ALWAYS;
-    private TeamVisibilityOption nameTagVisibility = TeamVisibilityOption.ALWAYS;
-    private TeamVisibilityOption deathMessageVisibility = TeamVisibilityOption.ALWAYS;
+    private TeamOptionStatus collisionRule = TeamOptionStatus.ALWAYS;
+    private TeamOptionStatus nameTagVisibility = TeamOptionStatus.ALWAYS;
+    private TeamOptionStatus deathMessageVisibility = TeamOptionStatus.ALWAYS;
 
     /**
      * Use {@link TeamOptionsBuilder} to create a new instance.
@@ -27,7 +27,7 @@ public class TeamOptions {
      * @param nameTagVisibility The name tag visibility option of the team.
      * @param deathMessageVisibility The death message visibility option of the team.
      */
-    TeamOptions(String prefix, String suffix, ChatColor color, boolean friendlyFire, boolean seeFriendlyInvisibles, TeamCollisionRule collisionRule, TeamVisibilityOption nameTagVisibility, TeamVisibilityOption deathMessageVisibility) {
+    TeamOptions(String prefix, String suffix, ChatColor color, boolean friendlyFire, boolean seeFriendlyInvisibles, TeamOptionStatus collisionRule, TeamOptionStatus nameTagVisibility, TeamOptionStatus deathMessageVisibility) {
         this.prefix = prefix;
         this.suffix = suffix;
         this.color = color;
@@ -76,21 +76,21 @@ public class TeamOptions {
     /**
      * @return The collision rule of the team.
      */
-    public TeamCollisionRule getCollisionRule() {
+    public TeamOptionStatus getCollisionRule() {
         return collisionRule;
     }
 
     /**
      * @return The name tag visibility option of the team.
      */
-    public TeamVisibilityOption getNameTagVisibility() {
+    public TeamOptionStatus getNameTagVisibility() {
         return nameTagVisibility;
     }
 
     /**
      * @return The death message visibility option of the team.
      */
-    public TeamVisibilityOption getDeathMessageVisibility() {
+    public TeamOptionStatus getDeathMessageVisibility() {
         return deathMessageVisibility;
     }
 

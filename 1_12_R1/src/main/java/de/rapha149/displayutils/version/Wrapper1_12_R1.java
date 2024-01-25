@@ -6,10 +6,9 @@ import de.rapha149.displayutils.version.ReflectionUtil.ReflectionException;
 import de.rapha149.displayutils.display.npc.NPC;
 import de.rapha149.displayutils.display.npc.NPCSkin;
 import de.rapha149.displayutils.display.npc.NPCSkin.NPCSkinPart;
-import de.rapha149.displayutils.display.scoreboard.TeamCollisionRule;
 import de.rapha149.displayutils.display.scoreboard.TeamOptions;
 import de.rapha149.displayutils.display.scoreboard.TeamOptionsBuilder;
-import de.rapha149.displayutils.display.scoreboard.TeamVisibilityOption;
+import de.rapha149.displayutils.display.scoreboard.TeamOptionStatus;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
@@ -137,21 +136,21 @@ public class Wrapper1_12_R1 implements VersionWrapper {
                 .setColor(ChatColor.valueOf(t.getColor().name()))
                 .setFriendlyFire(t.allowFriendlyFire())
                 .setSeeFriendlyInvisibles(t.canSeeFriendlyInvisibles())
-                .setNameTagVisibility(TeamVisibilityOption.valueOf(t.getNameTagVisibility().name()))
-                .setDeathMessageVisibility(TeamVisibilityOption.valueOf(t.getDeathMessageVisibility().name()));
+                .setNameTagVisibility(parseVisibilityOption(t.getNameTagVisibility()))
+                .setDeathMessageVisibility(parseVisibilityOption(t.getDeathMessageVisibility()));
 
         switch (t.getCollisionRule()) {
             case ALWAYS:
-                builder.setCollisionRule(TeamCollisionRule.ALWAYS);
+                builder.setCollisionRule(TeamOptionStatus.ALWAYS);
                 break;
             case NEVER:
-                builder.setCollisionRule(TeamCollisionRule.NEVER);
+                builder.setCollisionRule(TeamOptionStatus.NEVER);
                 break;
             case HIDE_FOR_OTHER_TEAMS:
-                builder.setCollisionRule(TeamCollisionRule.PUSH_OTHER_TEAMS);
+                builder.setCollisionRule(TeamOptionStatus.FOR_OTHER_TEAMS);
                 break;
             case HIDE_FOR_OWN_TEAM:
-                builder.setCollisionRule(TeamCollisionRule.PUSH_OWN_TEAM);
+                builder.setCollisionRule(TeamOptionStatus.FOR_OWN_TEAM);
                 break;
         }
 
@@ -174,16 +173,46 @@ public class Wrapper1_12_R1 implements VersionWrapper {
             case NEVER:
                 t.setCollisionRule(EnumTeamPush.NEVER);
                 break;
-            case PUSH_OTHER_TEAMS:
+            case FOR_OTHER_TEAMS:
                 t.setCollisionRule(EnumTeamPush.HIDE_FOR_OTHER_TEAMS);
                 break;
-            case PUSH_OWN_TEAM:
+            case FOR_OWN_TEAM:
                 t.setCollisionRule(EnumTeamPush.HIDE_FOR_OWN_TEAM);
                 break;
         }
 
-        t.setNameTagVisibility(EnumNameTagVisibility.valueOf(options.getNameTagVisibility().name()));
-        t.setDeathMessageVisibility(EnumNameTagVisibility.valueOf(options.getDeathMessageVisibility().name()));
+        t.setNameTagVisibility(formatVisibilityOption(options.getNameTagVisibility()));
+        t.setDeathMessageVisibility(formatVisibilityOption(options.getDeathMessageVisibility()));
+    }
+
+    private TeamOptionStatus parseVisibilityOption(EnumNameTagVisibility visibility) {
+        switch (visibility) {
+            case ALWAYS:
+                return TeamOptionStatus.ALWAYS;
+            case NEVER:
+                return TeamOptionStatus.NEVER;
+            case HIDE_FOR_OTHER_TEAMS:
+                return TeamOptionStatus.FOR_OTHER_TEAMS;
+            case HIDE_FOR_OWN_TEAM:
+                return TeamOptionStatus.FOR_OWN_TEAM;
+            default:
+                throw new IllegalStateException("Unexpected value: " + visibility);
+        }
+    }
+
+    private EnumNameTagVisibility formatVisibilityOption(TeamOptionStatus status) {
+        switch (status) {
+            case ALWAYS:
+                return EnumNameTagVisibility.ALWAYS;
+            case NEVER:
+                return EnumNameTagVisibility.NEVER;
+            case FOR_OTHER_TEAMS:
+                return EnumNameTagVisibility.HIDE_FOR_OTHER_TEAMS;
+            case FOR_OWN_TEAM:
+                return EnumNameTagVisibility.HIDE_FOR_OWN_TEAM;
+            default:
+                throw new IllegalStateException("Unexpected value: " + status);
+        }
     }
 
     @Override
