@@ -20,7 +20,9 @@ import java.util.stream.Collectors;
 
 import static de.rapha149.displayutils.util.DisplayUtils.*;
 
-
+/**
+ * Utility class for creating holograms.
+ */
 public class HologramUtil {
 
     private static Map<String, HologramData> holograms = new HashMap<>();

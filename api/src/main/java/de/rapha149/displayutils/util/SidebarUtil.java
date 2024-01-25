@@ -19,6 +19,9 @@ import java.util.stream.Collectors;
 
 import static de.rapha149.displayutils.util.DisplayUtils.*;
 
+/**
+ * Utility class for modifying the sidebar.
+ */
 public class SidebarUtil {
 
     private static final Pattern STARTSWITH_COLOR_CHAR = Pattern.compile("^[0-9a-fk-or]", Pattern.CASE_INSENSITIVE);

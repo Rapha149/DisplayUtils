@@ -18,6 +18,9 @@ import java.util.stream.Collectors;
 
 import static de.rapha149.displayutils.util.DisplayUtils.*;
 
+/**
+ * Utility class for modifying the tablist.
+ */
 public class TablistUtil {
 
     private static final TeamOptions DEFAULT_TEAM_OPTIONS = new TeamOptionsBuilder().build();
