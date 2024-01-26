@@ -53,7 +53,7 @@ public class NPCBuilder {
     }
 
     /**
-     * Sets the players that can see the NPC. All other players won't be able to see it.
+     * Sets the players that can see the NPC. All other players won't be able to see it. <br>
      * If this and the other mentioned methods are not called, all players will be able to see the NPC.
      *
      * @param includedPlayers The players that can see the NPC.
@@ -72,7 +72,7 @@ public class NPCBuilder {
     }
 
     /**
-     * Sets the players that can see the NPC. All other players won't be able to see it.
+     * Sets the players that can see the NPC. All other players won't be able to see it. <br>
      * If this and the other mentioned methods are not called, all players will be able to see the NPC.
      *
      * @param uuids The uuids of the players that can see the NPC.
@@ -91,7 +91,7 @@ public class NPCBuilder {
     }
 
     /**
-     * Sets the players that cannot see the NPC. All other players will be able to see it.
+     * Sets the players that cannot see the NPC. All other players will be able to see it. <br>
      * If this and the other mentioned methods are not called, all players will be able to see the NPC.
      *
      * @param excludedPlayers The players that cannot see the NPC.
@@ -110,7 +110,7 @@ public class NPCBuilder {
     }
 
     /**
-     * Sets the players that cannot see the NPC. All other players will be able to see it.
+     * Sets the players that cannot see the NPC. All other players will be able to see it. <br>
      * If this and the other mentioned methods are not called, all players will be able to see the NPC.
      *
      * @param uuids The uuids of the players that cannot see the NPC.
@@ -142,10 +142,9 @@ public class NPCBuilder {
 
     /**
      * Sets whether the NPC is collidable or not.
-     * The default is true.
-     * <p>
-     * When using this method you should avoid sending NPCs with the same name to the same player.
-     * That is because this flag is applied by adding the NPC to a team, which can only be done by name.
+     * The default is true. <br>
+     * When using this method you should avoid sending NPCs with the same name to the same player. <br>
+     * That is because this flag is applied by adding the NPC to a team, which can only be done by name. <br>
      * Therefore having two NPCs with the same name but different collidable flags will result in the same flag for both NPCs.
      *
      * @param collidable Whether the NPC is collidable or not.
@@ -158,10 +157,10 @@ public class NPCBuilder {
 
     /**
      * Sets whether the NPC's name tag is visible or not.
-     * The default is true.
-     * <p>
-     * When using this method you should avoid sending NPCs with the same name to the same player.
-     * That is because this flag is applied by adding the NPC to a team, which can only be done by name.
+     * The default is true. <br>
+     *
+     * When using this method you should avoid sending NPCs with the same name to the same player. <br>
+     * That is because this flag is applied by adding the NPC to a team, which can only be done by name. <br>
      * Therefore having two NPCs with the same name but different nameTagVisible flags will result in the same flag for both NPCs.
      *
      * @param nameTagVisible Whether the NPC's name tag is visible or not.
@@ -174,9 +173,10 @@ public class NPCBuilder {
 
     /**
      * Sets whether the NPC should match the sneaking state of each player.
-     * The default is false.
-     * <p>
-     * This will work even when there are multiple players that can see the NPC. The NPC will individually adjust its sneaking state to match that of each player, making it unique to each respective player.
+     * The default is false. <br>
+     *
+     * This will work even when there are multiple players that can see the NPC. The NPC will individually adjust its
+     * sneaking state to match that of each player, making it unique to each respective player.
      *
      * @param matchSneakingWithPlayer Whether the NPC should match the sneaking state of the player.
      * @return The {@link NPCBuilder} instance.
@@ -188,8 +188,8 @@ public class NPCBuilder {
 
     /**
      * Sets whether the NPC should look at each player.
-     * The default is false.
-     * <p>
+     * The default is false. <br>
+     *
      * This will work even when there are multiple players that can see the NPC. The NPC will individually look at each player, making it unique to each respective player.
      *
      * @param lookAtPlayer Whether the NPC should look at the player.

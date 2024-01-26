@@ -76,7 +76,7 @@ public class HologramBuilder {
     }
 
     /**
-     * Sets the modifier that can be used to update the lines of the hologram without re-adding it.
+     * Sets the modifier that can be used to update the lines of the hologram without re-adding it. <br>
      * Use this method if the content of the hologram is different for each player.
      * @param playerModifier The modifier.
      * @return The {@link HologramBuilder} instance.
@@ -91,7 +91,9 @@ public class HologramBuilder {
     }
 
     /**
-     * Sets the interval in which the content of the hologram is updated. If this method is not called, the content will not be automatically updated.
+     * Sets the interval in which the content of the hologram is updated. <br>
+     * If this method is not called, the content will not be automatically updated.
+     *
      * @param updateInterval The interval in ticks.
      * @return The {@link HologramBuilder} instance.
      * @throws java.lang.IllegalArgumentException If the update interval is negative.
@@ -105,7 +107,9 @@ public class HologramBuilder {
     }
 
     /**
-     * Sets the players that can see the hologram. All other players won't be able to see it.
+     * Sets the players that can see the hologram. All other players won't be able to see it. <br>
+     * If this method and the other mentioned mentions are not called, all players will be able to see the hologram.
+     *
      * @param players The players that can see the hologram.
      * @return The {@link HologramBuilder} instance.
      * @see #setPlayerUUIDs(List)
@@ -118,7 +122,9 @@ public class HologramBuilder {
     }
     
     /**
-     * Sets the players that can see the hologram. All other players won't be able to see it.
+     * Sets the players that can see the hologram. All other players won't be able to see it. <br>
+     * If this method and the other mentioned mentions are not called, all players will be able to see the hologram.
+     *
      * @param uuids The uuids of the players that can see the hologram.
      * @return The {@link HologramBuilder} instance.
      * @see #setPlayers(List)
@@ -131,9 +137,10 @@ public class HologramBuilder {
     }
 
     /**
-     * Sets a supplier that is used to get the players that can see the hologram. All other players won't be able to see it.
-     * The supplier will be called every time the hologram is updated.
-     * This overrides the players that are set with {@link #setPlayers(List)}.
+     * Sets a supplier that is used to get the players that can see the hologram. All other players won't be able to see it. <br>
+     * The supplier will be called every time the hologram is updated. <br>
+     * This overrides the players that are set with {@link #setPlayers(List)}. <br>
+     * If this method and the other mentioned mentions are not called, all players will be able to see the hologram.
      *
      * @param playerSupplier The supplier that is used to get the players that can see the hologram.
      * @return The {@link HologramBuilder} instance.
@@ -150,9 +157,10 @@ public class HologramBuilder {
     }
 
     /**
-     * Sets a supplier that is used to get the players that can see the hologram. All other players won't be able to see it.
-     * The supplier will be called every time the hologram is updated.
-     * This overrides the players that are set with {@link #setPlayers(List)}.
+     * Sets a supplier that is used to get the players that can see the hologram. All other players won't be able to see it. <br>
+     * The supplier will be called every time the hologram is updated. <br>
+     * This overrides the players that are set with {@link #setPlayers(List)}. <br>
+     * If this method and the other mentioned mentions are not called, all players will be able to see the hologram.
      *
      * @param uuidsSupplier The supplier that is used to get the uuids of the players that can see the hologram.
      * @return The {@link HologramBuilder} instance.

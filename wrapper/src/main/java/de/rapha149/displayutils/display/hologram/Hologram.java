@@ -78,6 +78,7 @@ public class Hologram {
 
     /**
      * @return The general modifier that is used to update the lines of the hologram.
+     * @see GeneralHologramContentModifier
      */
     public GeneralHologramContentModifier getGeneralModifier() {
         return generalModifier;
@@ -85,6 +86,8 @@ public class Hologram {
 
     /**
      * @return The player specific modifier that is used to update the lines of the hologram.
+     * @see PlayerHologramContentModifier
+     * @see #hasPlayerModifier()
      */
     public PlayerHologramContentModifier getPlayerModifier() {
         return playerModifier;
@@ -92,6 +95,7 @@ public class Hologram {
 
     /**
      * @return Whether the hologram has a player specific modifier.
+     * @see #getPlayerModifier()
      */
     public boolean hasPlayerModifier() {
         return playerModifier != null;

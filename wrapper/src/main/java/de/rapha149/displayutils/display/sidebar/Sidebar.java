@@ -56,6 +56,7 @@ public class Sidebar {
 
     /**
      * @return The general modifier that is used to update the lines of the sidebar.
+     * @see GeneralSidebarContentModifier
      */
     public GeneralSidebarContentModifier getGeneralModifier() {
         return generalModifier;
@@ -63,6 +64,8 @@ public class Sidebar {
 
     /**
      * @return The player specific modifier that is used to update the lines of the sidebar.
+     * @see PlayerSidebarContentProvider
+     * @see #hasPlayerModifier()
      */
     public PlayerSidebarContentProvider getPlayerModifier() {
         return playerModifier;
@@ -70,6 +73,7 @@ public class Sidebar {
 
     /**
      * @return Whether the sidebar has a player specific modifier.
+     * @see #getPlayerModifier()
      */
     public boolean hasPlayerModifier() {
         return playerModifier != null;

@@ -22,9 +22,9 @@ public class SidebarBuilder {
     private Supplier<List<UUID>> playerSupplier = null;
 
     /**
-     * Constructs a new SidebarBuilder. <p>
-     * If the title is longer than 32 characters, it will be cut off. <p>
-     * If there are more than 15 lines, the last lines will be ignored. <p>
+     * Constructs a new SidebarBuilder. <br>
+     * If the title is longer than 32 characters, it will be cut off. <br>
+     * If there are more than 15 lines, the last lines will be ignored. <br>
      * If a line is longer than 32 (up to 1.12) or 128 (since 1.13) characters, it will be cut off. If you are using color codes, it could also be cut off sooner.
      *
      * @param title The title of the sidebar. Will be shown above the lines.
@@ -43,8 +43,9 @@ public class SidebarBuilder {
     }
 
     /**
-     * Sets the modifier that can be used to update the lines of the sidebar without re-adding it.
+     * Sets the modifier that can be used to update the lines of the sidebar without re-adding it. <br>
      * Use this method if the content of the sidebar is the same for all players.
+     *
      * @param generalModifier The modifier.
      * @return The {@link SidebarBuilder} instance.
      * @throws java.lang.NullPointerException If the modifier is null.
@@ -58,8 +59,9 @@ public class SidebarBuilder {
     }
 
     /**
-     * Sets the modifier that can be used to update the lines of the sidebar without re-adding it.
+     * Sets the modifier that can be used to update the lines of the sidebar without re-adding it. <br>
      * Use this method if the content of the sidebar is different for each player.
+     *
      * @param playerModifier The modifier.
      * @return The {@link SidebarBuilder} instance.
      * @throws java.lang.NullPointerException If the modifier is null.
@@ -73,7 +75,9 @@ public class SidebarBuilder {
     }
 
     /**
-     * Sets the interval in which the content of the sidebar is updated. If this method is not called, the content will not be automatically updated.
+     * Sets the interval in which the content of the sidebar is updated. <br>
+     * If this method is not called, the content will not be automatically updated.
+     *
      * @param updateInterval The interval in ticks.
      * @return The {@link SidebarBuilder} instance.
      * @throws java.lang.IllegalArgumentException If the update interval is negative.
@@ -87,7 +91,9 @@ public class SidebarBuilder {
     }
 
     /**
-     * Sets the players that can see the sidebar. All other players won't be able to see it.
+     * Sets the players that can see the sidebar. All other players won't be able to see it. <br>
+     * If this method and the other mentioned mentions are not called, all players will be able to see the sidebar.
+     *
      * @param players The players that can see the sidebar.
      * @return The {@link SidebarBuilder} instance.
      * @see #setPlayerUUIDs(List)
@@ -100,7 +106,9 @@ public class SidebarBuilder {
     }
 
     /**
-     * Sets the players that can see the sidebar. All other players won't be able to see it.
+     * Sets the players that can see the sidebar. All other players won't be able to see it. <br>
+     * If this method and the other mentioned mentions are not called, all players will be able to see the sidebar.
+     *
      * @param uuids The uuids of the players that can see the sidebar.
      * @return The {@link SidebarBuilder} instance.
      * @see #setPlayers(List)
@@ -113,9 +121,10 @@ public class SidebarBuilder {
     }
 
     /**
-     * Sets a supplier that is used to get the players that can see the sidebar. All other players won't be able to see it.
-     * The supplier will be called every time the sidebar is updated.
-     * This overrides the players that are set with {@link #setPlayers(List)}.
+     * Sets a supplier that is used to get the players that can see the sidebar. All other players won't be able to see it. <br>
+     * The supplier will be called every time the sidebar is updated. <br>
+     * This overrides the players that are set with {@link #setPlayers(List)}. <br>
+     * If this method and the other mentioned mentions are not called, all players will be able to see the sidebar.
      *
      * @param playerSupplier The supplier that is used to get the players that can see the sidebar.
      * @return The {@link SidebarBuilder} instance.
@@ -132,9 +141,10 @@ public class SidebarBuilder {
     }
 
     /**
-     * Sets a supplier that is used to get the players that can see the sidebar. All other players won't be able to see it.
-     * The supplier will be called every time the sidebar is updated.
-     * This overrides the players that are set with {@link #setPlayers(List)}.
+     * Sets a supplier that is used to get the players that can see the sidebar. All other players won't be able to see it. <br>
+     * The supplier will be called every time the sidebar is updated. <br>
+     * This overrides the players that are set with {@link #setPlayers(List)}. <br>
+     * If this method and the other mentioned mentions are not called, all players will be able to see the sidebar.
      *
      * @param uuidsSupplier The supplier that is used to get the uuids of the players that can see the sidebar.
      * @return The {@link SidebarBuilder} instance.

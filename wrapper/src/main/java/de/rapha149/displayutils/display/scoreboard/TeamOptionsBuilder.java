@@ -41,8 +41,8 @@ public class TeamOptionsBuilder {
     }
 
     /**
-     * Sets the color of the team. <p>
-     * Please note that in older versions of Minecraft, this color is not displayed in the tablist.
+     * Sets the color of the team. <br>
+     * Please note that in older versions of Minecraft, this color is not displayed in the tablist. <br>
      * In order to change the color of the team in the tablist, set the final color of the prefix to your desired color.
      *
      * @param color The color of the team.

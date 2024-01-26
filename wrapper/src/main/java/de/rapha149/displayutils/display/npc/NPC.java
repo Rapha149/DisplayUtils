@@ -138,6 +138,7 @@ public class NPC {
 
     /**
      * @return The listener that is called when the NPC is used.
+     * @see NPCUseListener
      */
     public NPCUseListener getUseListener() {
         return useListener;
