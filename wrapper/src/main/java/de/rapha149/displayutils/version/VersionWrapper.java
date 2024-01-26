@@ -42,14 +42,12 @@ public interface VersionWrapper {
     void addIncomingPacketHandler(Player player, String handlerName, Predicate<Object> listener);
 
     /**
-     * Returns the max length of prefixes and suffixes of teams.
-     * Up to 1.12 this is 16, afterwards it is 64.
-     * @return The max length of prefixes and suffixes of teams for the current version.
+     * @return The max length of prefixes and suffixes of teams for the current version or -1 if the length is unlimited for this version.
      */
     int getMaxTeamPrefixSuffixLength();
 
     /**
-     * @return The max length of objective display names for the current version.
+     * @return The max length of objective display names for the current version or -1 if the length is unlimited for this version.
      */
     int getMaxObjetiveDisplayNameLength();
 

@@ -118,7 +118,7 @@ public class SidebarUtil {
         if (!uninitialized.isEmpty()) {
             String title = sidebar.getTitle();
             int maxTitleLength = wrapper.getMaxObjetiveDisplayNameLength();
-            if (title.length() > maxTitleLength) {
+            if (maxTitleLength != -1 && title.length() > maxTitleLength) {
                 String newTitle = title.substring(0, maxTitleLength);
                 if (newTitle.endsWith("§") && STARTSWITH_COLOR_CHAR.matcher(title.substring(maxTitleLength)).find())
                     newTitle = newTitle.substring(0, newTitle.length() - 1);
@@ -194,27 +194,33 @@ public class SidebarUtil {
                 teams.add(wrapper.newTeam(scoreboard, "sidebar_" + i));
         }
 
-        int length = line.length(), maxLength = wrapper.getMaxTeamPrefixSuffixLength();
-        String prefix = line.substring(0, Math.min(length, maxLength));
-        String suffix;
-        if (length > maxLength) {
-            suffix = line.substring(maxLength);
-            if (prefix.endsWith("§") && STARTSWITH_COLOR_CHAR.matcher(suffix).find()) {
-                prefix = prefix.substring(0, prefix.length() - 1);
-                suffix = "§" + suffix;
-            }
-            if (!STARTSWITH_NEW_COLOR.matcher(suffix).find()) {
-                String lastColors = ChatColor.getLastColors(prefix);
-                suffix = (lastColors.isEmpty() ? "§r" : "") + suffix;
-            }
-            if (suffix.length() > maxLength) {
-                String newSuffix = suffix.substring(0, maxLength);
-                if (newSuffix.endsWith("§") && STARTSWITH_COLOR_CHAR.matcher(suffix.substring(maxLength)).find())
-                    newSuffix = newSuffix.substring(0, newSuffix.length() - 1);
-                suffix = newSuffix;
-            }
-        } else
+        int maxLength = wrapper.getMaxTeamPrefixSuffixLength();
+        String prefix, suffix;
+        if (maxLength == -1) {
+            prefix = line;
             suffix = "";
+        } else {
+            int length = line.length();
+            prefix = line.substring(0, Math.min(length, maxLength));
+            if (length > maxLength) {
+                suffix = line.substring(maxLength);
+                if (prefix.endsWith("§") && STARTSWITH_COLOR_CHAR.matcher(suffix).find()) {
+                    prefix = prefix.substring(0, prefix.length() - 1);
+                    suffix = "§" + suffix;
+                }
+                if (!STARTSWITH_NEW_COLOR.matcher(suffix).find()) {
+                    String lastColors = ChatColor.getLastColors(prefix);
+                    suffix = (lastColors.isEmpty() ? "§r" : "") + suffix;
+                }
+                if (suffix.length() > maxLength) {
+                    String newSuffix = suffix.substring(0, maxLength);
+                    if (newSuffix.endsWith("§") && STARTSWITH_COLOR_CHAR.matcher(suffix.substring(maxLength)).find())
+                        newSuffix = newSuffix.substring(0, newSuffix.length() - 1);
+                    suffix = newSuffix;
+                }
+            } else
+                suffix = "";
+        }
 
         Object team = teams.get(index);
         wrapper.setTeamOptions(team, new TeamOptionsBuilder()
