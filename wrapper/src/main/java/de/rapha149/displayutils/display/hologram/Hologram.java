@@ -16,6 +16,7 @@ public class Hologram {
     private final String identifier;
     private final List<String> lines;
     private final Location loc;
+    private final HologramVerticalAlignment verticalAlignment;
     private final GeneralHologramContentModifier generalModifier;
     private final PlayerHologramContentModifier playerModifier;
     private final Integer updateInterval;
@@ -27,16 +28,18 @@ public class Hologram {
      * @param identifier The identifier of the hologram. Must be unique.
      * @param lines The lines of the hologram.
      * @param loc The location of the hologram (the location of the first line).
+     * @param verticalAlignment The vertical alignment of the hologram. See {@link HologramVerticalAlignment}.
      * @param generalModifier The general modifier that is used to update the lines of the hologram.
      * @param playerModifier The player specific modifier that is used to update the lines of the hologram.
      * @param updateInterval The interval in ticks in which the content of the hologram is updated. If this is null, the content is not automatically updated.
      * @param players The players that can see the hologram. All other players won't be able to see it. If this is null, all players will be able to see the hologram.
      * @param playerSupplier The supplier that is used to get the players that can see the hologram. All other players won't be able to see it. If this is null, the parameter players is used.
      */
-    Hologram(String identifier, List<String> lines, Location loc, GeneralHologramContentModifier generalModifier, PlayerHologramContentModifier playerModifier, Integer updateInterval, List<UUID> players, Supplier<List<UUID>> playerSupplier) {
+    Hologram(String identifier, List<String> lines, Location loc, HologramVerticalAlignment verticalAlignment, GeneralHologramContentModifier generalModifier, PlayerHologramContentModifier playerModifier, Integer updateInterval, List<UUID> players, Supplier<List<UUID>> playerSupplier) {
         this.identifier = identifier;
         this.lines = lines;
         this.loc = loc;
+        this.verticalAlignment = verticalAlignment;
         this.generalModifier = generalModifier;
         this.playerModifier = playerModifier;
         this.updateInterval = updateInterval;
@@ -63,6 +66,14 @@ public class Hologram {
      */
     public Location getLoc() {
         return loc;
+    }
+
+    /**
+     * @return The vertical alignment of the hologram.
+     * @see HologramVerticalAlignment
+     */
+    public HologramVerticalAlignment getVerticalAlignment() {
+        return verticalAlignment;
     }
 
     /**

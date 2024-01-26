@@ -17,6 +17,7 @@ public class HologramBuilder {
     private String identifier;
     private List<String> lines;
     private Location loc;
+    private HologramVerticalAlignment verticalAlignment = HologramVerticalAlignment.CENTER;
     private GeneralHologramContentModifier generalModifier;
     private PlayerHologramContentModifier playerModifier;
     private Integer updateInterval = null;
@@ -44,7 +45,23 @@ public class HologramBuilder {
     }
 
     /**
-     * Sets the modifier that can be used to update the lines of the hologram without re-adding it.
+     * Sets the vertical alignment of the hologram. <br>
+     * The default is CENTER.
+     *
+     * @param verticalAlignment The vertical alignment.
+     * @return The {@link HologramBuilder} instance.
+     * @throws java.lang.NullPointerException If the verticalAlignment is null.
+     * @see HologramVerticalAlignment
+     */
+    public HologramBuilder setVerticalAlignment(HologramVerticalAlignment verticalAlignment) {
+        Objects.requireNonNull(verticalAlignment, "The vertical alignment cannot be null");
+
+        this.verticalAlignment = verticalAlignment;
+        return this;
+    }
+
+    /**
+     * Sets the modifier that can be used to update the lines of the hologram without re-adding it. <br>
      * Use this method if the content of the hologram is the same for all players.
      * @param generalModifier The modifier.
      * @return The {@link HologramBuilder} instance.
@@ -156,6 +173,6 @@ public class HologramBuilder {
      * @return The {@link Hologram} instance.
      */
     public Hologram build() {
-        return new Hologram(identifier, lines, loc, generalModifier, playerModifier, updateInterval, players, playerSupplier);
+        return new Hologram(identifier, lines, loc, verticalAlignment, generalModifier, playerModifier, updateInterval, players, playerSupplier);
     }
 }

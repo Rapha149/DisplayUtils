@@ -1,6 +1,7 @@
 package de.rapha149.displayutils.util;
 
 import de.rapha149.displayutils.display.hologram.Hologram;
+import de.rapha149.displayutils.display.hologram.HologramVerticalAlignment;
 import de.rapha149.displayutils.util.HologramUtil.HologramData.GeneralHologramData;
 import de.rapha149.displayutils.util.HologramUtil.HologramData.PlayerHologramData;
 import org.bukkit.Bukkit;
@@ -48,9 +49,18 @@ public class HologramUtil {
         if (holograms.containsKey(identifier))
             throw new IllegalArgumentException("Hologram with identifier " + identifier + " already exists");
 
-        List<ArmorStand> armorStands = new ArrayList<>();
+        int lineCount = hologram.getLines().size();
         Location currentLoc = hologram.getLoc().clone().subtract(0, 0.5, 0);
-        for (int i = 0; i < hologram.getLines().size(); i++) {
+        if (hologram.getVerticalAlignment() == HologramVerticalAlignment.CENTER) {
+            int half = lineCount / 2;
+            currentLoc.add(0, 0.25 * half, 0);
+            if (lineCount % 2 != 0)
+                currentLoc.add(0, 0.125, 0);
+        } else if (hologram.getVerticalAlignment() == HologramVerticalAlignment.BOTTOM)
+            currentLoc.add(0, 0.25 * lineCount, 0);
+
+        List<ArmorStand> armorStands = new ArrayList<>();
+        for (int i = 0; i < lineCount; i++) {
             ArmorStand armorStand = wrapper.createArmorStand(currentLoc);
             armorStand.setVisible(false);
             armorStand.setMarker(true);
