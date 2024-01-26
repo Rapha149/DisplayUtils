@@ -80,8 +80,15 @@ public class TablistUtil {
         List<TablistGroup> groups = new ArrayList<>();
         List<String> existingPlayers = new ArrayList<>();
         for (TablistGroup group : content) {
+            List<String> players = new ArrayList<>();
+            for (String player : group.getPlayers()) {
+                if (!existingPlayers.contains(player)) {
+                    players.add(player);
+                    existingPlayers.add(player);
+                }
+            }
+
             if (group.isCustomPlayerOrder()) {
-                List<String> players = group.getPlayers();
                 for (int i = 0; i < players.size(); i++) {
                     groups.add(new TablistGroup(
                             group.getIdentifier() + "-pos" + i,
@@ -94,12 +101,10 @@ public class TablistUtil {
                 groups.add(new TablistGroup(
                         group.getIdentifier() + "-pos0",
                         group.getTeamOptions(),
-                        group.getPlayers(),
+                        players,
                         false
                 ));
             }
-
-            existingPlayers.addAll(group.getPlayers());
         }
 
         List<String> remainingPlayers = Bukkit.getOnlinePlayers().stream().map(Player::getName)
