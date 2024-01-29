@@ -54,6 +54,19 @@ public class TablistUtil {
     }
 
     /**
+     * Removes the tablist content provider and resets the tablist.
+     */
+    public static void removeTablistProvider() {
+        checkUsable();
+        TablistUtil.provider = null;
+
+        List<Object> packets = teams.values().stream().map(entry -> wrapper.getTeamActionPacket(entry.getValue(), ScoreboardAction.REMOVE)).collect(Collectors.toList());
+        for (Player player : Bukkit.getOnlinePlayers())
+            wrapper.sendPackets(player, packets);
+        teams.clear();
+    }
+
+    /**
      * Updates the tablist for all players.
      * You do not have to call this method when a player joins, the tablist is shown to them automatically.
      */
