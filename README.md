@@ -1,4 +1,4 @@
-# DisplayUtils [![Maven Central](https://img.shields.io/maven-central/v/de.rapha149.displayutils/displayutils?label=Maven%20Central)](https://central.sonatype.com/artifact/de.rapha149.displayutils/displayutils) [![Javadoc](https://javadoc.io/badge2/de.rapha149.displayutils/displayutils/Javadoc.svg)](https://javadoc.io/doc/de.rapha149.displayutils/displayutils) 
+# DisplayUtils [![Build](https://github.com/Rapha149/DisplayUtils/actions/workflows/build.yml/badge.svg)](https://github.com/Rapha149/DisplayUtils/actions/workflows/build.yml) [![Maven Central](https://img.shields.io/maven-central/v/de.rapha149.displayutils/displayutils?label=Maven%20Central)](https://central.sonatype.com/artifact/de.rapha149.displayutils/displayutils) [![Javadoc](https://javadoc.io/badge2/de.rapha149.displayutils/displayutils/Javadoc.svg)](https://javadoc.io/doc/de.rapha149.displayutils/displayutils) 
 An api to display various things in Minecraft that normally would need packets. With the api you an spawn NPCs, create holograms and create a lag-free tablist and sidebar!  
 The api currently only supports the server version `1.12.2` and `1.16.5`.
 
