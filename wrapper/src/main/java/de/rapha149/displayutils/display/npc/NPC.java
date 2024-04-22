@@ -23,6 +23,9 @@ public class NPC {
     private final boolean matchSneakingWithPlayer;
     private final boolean lookAtPlayer;
 
+    private final int maxDistanceSquared;
+    private final double maxViewAngleCos;
+
     private final NPCUseListener useListener;
     private final int listenerCooldown;
 
@@ -39,10 +42,12 @@ public class NPC {
      * @param nameTagVisible Whether the NPC's name tag is visible.
      * @param matchSneakingWithPlayer Whether the NPC's sneaking state should be matched with each player's sneaking state.
      * @param lookAtPlayer Whether the NPC should look at each player.
+     * @param maxDistanceSquared The maximum distance squared in blocks at which the NPC is shown to the player.
+     * @param maxViewAngleCos The maximum cosine of the view angle at which the NPC is shown to the player.
      * @param useListener The listener that is called when the NPC is used.
      * @param listenerCooldown The cooldown of the listener in ticks.
      */
-    NPC(String identifier, String name, NPCSkin skin, Location loc, List<UUID> includedPlayers, List<UUID> excludedPlayers, boolean sneaking, boolean collidable, boolean nameTagVisible, boolean matchSneakingWithPlayer, boolean lookAtPlayer, NPCUseListener useListener, int listenerCooldown) {
+    NPC(String identifier, String name, NPCSkin skin, Location loc, List<UUID> includedPlayers, List<UUID> excludedPlayers, boolean sneaking, boolean collidable, boolean nameTagVisible, boolean matchSneakingWithPlayer, boolean lookAtPlayer, int maxDistanceSquared, double maxViewAngleCos, NPCUseListener useListener, int listenerCooldown) {
         this.identifier = identifier;
         this.name = name;
         this.skin = skin;
@@ -54,6 +59,8 @@ public class NPC {
         this.nameTagVisible = nameTagVisible;
         this.matchSneakingWithPlayer = matchSneakingWithPlayer;
         this.lookAtPlayer = lookAtPlayer;
+        this.maxDistanceSquared = maxDistanceSquared;
+        this.maxViewAngleCos = maxViewAngleCos;
         this.useListener = useListener;
         this.listenerCooldown = Math.max(listenerCooldown, 1);
     }
@@ -134,6 +141,20 @@ public class NPC {
      */
     public boolean isLookAtPlayer() {
         return lookAtPlayer;
+    }
+
+    /**
+     * @return The maximum distance squared in blocks at which the NPC is shown to the player.
+     */
+    public int getMaxDistanceSquared() {
+        return maxDistanceSquared;
+    }
+
+    /**
+     * @return The maximum cosine of the view angle at which the NPC is shown to the player.
+     */
+    public double getMaxViewAngleCos() {
+        return maxViewAngleCos;
     }
 
     /**

@@ -81,6 +81,7 @@ public class NPCUtil {
 
     /**
      * Removes an NPC from the server.
+     *
      * @param identifier The identifier of the NPC to remove.
      * @return True if an NPC with that identifier existed and was removed, false otherwise.
      */
@@ -106,6 +107,7 @@ public class NPCUtil {
 
     /**
      * Checks whether an NPC with the given identifier exists.
+     *
      * @param identifier The identifier to check.
      * @return True if an NPC with that identifier exists, false otherwise.
      */
@@ -214,7 +216,7 @@ public class NPCUtil {
             if (!player.getWorld().getUID().equals(npc.getLoc().getWorld().getUID()))
                 return false;
 
-            return player.getLocation().distanceSquared(npc.getLoc()) <= 10000;
+            return player.getLocation().distanceSquared(npc.getLoc()) <= npc.getMaxDistanceSquared();
         }
 
         boolean isInView(Player player) {
@@ -223,8 +225,12 @@ public class NPCUtil {
             if (player.getLocation().distanceSquared(npc.getLoc()) < 0.01)
                 return true;
 
+            // The dot product of two normalized vectors (in this case, the direction to the NPC and the player's view direction)
+            // is equal to the cosine of the angle between them. Therefore, if the dot product is greater than the cosine of the
+            // maximum view angle (NPC#getMaxViewAngleCos), it means that the actual angle between the player's view direction and
+            // the direction to the NPC is less than the maximum view angle. In other words, the NPC is within the player's field of view.
             Location eye = player.getEyeLocation();
-            return npc.getLoc().toVector().subtract(eye.toVector()).normalize().dot(eye.getDirection()) > 0.5;
+            return npc.getLoc().toVector().subtract(eye.toVector()).normalize().dot(eye.getDirection()) >= npc.getMaxViewAngleCos();
         }
 
         /**
